@@ -1,0 +1,153 @@
+#include <stdio.h>
+#include <stdint.h>
+
+
+
+#define LEDRED LATGbits.LATG14
+#define LEDBLUE LATGbits.LATG12
+
+
+//Sampling Frequency: 22050 Hz
+// Filter setup:
+//     Filter kind: FIR
+//     Filter type: Lowpass filter
+//     Filter order: 40
+//     Filter window: Kaiser
+//     Filter borders:
+//       Wpass:4000 Hz
+//       Ap: 1 dB
+//       As: 60 dB
+//       Aa: 1 dB
+//       Wp: 4000 Hz
+//       Ws: 6000 Hz
+//       Wp2: 7500 Hz
+//       Ws2: 8000 Hz
+const unsigned BUFFFER_SIZE  = 32;
+const unsigned FILTER_ORDER  = 40;
+const unsigned N_CHANNEL = 16;
+
+const unsigned COEFF_B[FILTER_ORDER+1] = {
+      0xFFFB, 0x0029, 0x0025, 0xFFA1, 0xFF7F, 0x0095,
+      0x013C, 0xFF66, 0xFD92, 0x001D, 0x0419, 0x0155,
+      0xF9E1, 0xFB9B, 0x083F, 0x0A52, 0xF5DE, 0xE8CA,
+      0x0B6F, 0x501B, 0x741A, 0x501B, 0x0B6F, 0xE8CA,
+      0xF5DE, 0x0A52, 0x083F, 0xFB9B, 0xF9E1, 0x0155,
+      0x0419, 0x001D, 0xFD92, 0xFF66, 0x013C, 0x0095,
+      0xFF7F, 0xFFA1, 0x0025, 0x0029, 0xFFFB};
+
+
+unsigned inext;                                  // Input buffer index
+ydata unsigned input[N_CHANNEL][BUFFFER_SIZE];   // Input buffer, must be in Y data space
+int16_t data_buffer[N_CHANNEL];                  // Current value buffer, to be sent via bus
+unsigned cont = 0;
+
+void blink_led(){
+LEDBLUE = 0;
+LEDRED = 0;
+delay_ms(500);
+
+LEDBLUE = 1;
+LEDRED = 1;
+delay_ms(5000);
+}
+
+void adc_init(){
+
+IEC0bits.ADIE     = 0b1;               //adc interrupt enable
+IPC2bits.ADIP     = 0b001;             //adc interrupt priority
+IFS0bits.ADIF     = 0b0;               //clear interrupt flag
+
+ADPCFG            = 0b000000000000000; //All Analog input pin in Analog mode, port read input disabled, A/D samples pin voltage
+ADCON3bits.ADCS   = 0b011011;          //set Tad of the ADC          x27Tcy
+ADCON3bits.ADRC   = 0b0;              // clock from system
+ADCON3bits.SAMC   = 0b00010;          // 2Tad
+
+ADCON2bits.ALTS   = 0b0;              //Always use MUX A input multiplexer settings
+ADCON2bits.BUFM   = 0b0;              //Buffer configured as one 16-word buffer ADCBUF(15...0)
+ADCON2bits.SMPI   = 0b1111;            //Interrupts at the completion of conversion for each 16th sample/convert sequence
+ADCON2bits.CSCNA  = 0b1;              //Scan inputs
+ADCON2bits.VCFG   = 0b000;            //internal voltage reference VDD
+
+ADCON1bits.ASAM   = 0b1;              // Sampling begins immediately after last conversion completes. SAMP bit is auto set
+ADCON1bits.SSRC   = 0b111;            //Internal counter ends sampling and starts conversion (auto convert)
+ADCON1bits.FORM   = 0b00;             //data output integer
+ADCON1bits.ADSIDL = 0b0;              // Continue module operation in Idle mode
+ADCON1bits.ADON   = 0b0;
+
+ADCSSL = 0xFFFF;     //scan ALL inputs
+ADCHSbits.CH0NA = 0; //negative input for sampling Vref-
+
+}
+
+void tmr4_init(){
+
+T4CONbits.TON   = 0b1;
+T4CONbits.TSIDL = 0b0;     //Continue timer operation in Idle mode
+T4CONbits.TGATE = 0b0;     //no gated time
+T4CONbits.TCKPS = 0b00;    //prescaler
+T4CONbits.TCS = 0b0;       //Internal clock (FOSC/4)
+
+T4CONbits.T32 = 0b0;       //16 bit timer, separated from timer5
+IPC5bits.T4IP = 0b011;     //interrupt priority 3
+IFS1bits.T4IF = 0b0;       //clear interrupt
+IEC1bits.T4IE = 0b1;       //enable interrupt
+
+TMR4 = 0;
+PR4  = 20000;  //che variabili vanno a modificare queste due istruzioni?
+}
+
+void ADC_INT() iv IVT_ADDR_ADCINTERRUPT ics ICS_AUTO {
+  unsigned CurrentValue;
+  unsigned CHANNEL = 0;
+  int16_t *buffer_adc = &ADCBUF0;
+  for (CHANNEL=0;CHANNEL<N_CHANNEL;CHANNEL++)
+  {
+        input[CHANNEL][inext] = *buffer_adc;          // Fetch sample
+
+        CurrentValue = FIR_Radix(FILTER_ORDER+1,      // Filter order
+                                  COEFF_B,            // b coefficients of the filter
+                                  BUFFFER_SIZE,       // Input buffer length
+                                  input[CHANNEL],     // Input buffer
+                                  inext);             // Current sample
+                                  
+        data_buffer[CHANNEL] = CurrentValue;          //saves the data in the data_buffer
+        buffer_adc++;                                 //goes to the next memory location
+  }
+  
+  inext = (inext+1) & (BUFFFER_SIZE-1);   // inext = (inext + 1) mod BUFFFER_SIZE;
+  IFS0bits.ADIF     = 0b0;                //clear interrupt flag
+}
+
+void TIMER4_INT() iv IVT_ADDR_T4INTERRUPT ics ICS_AUTO {
+
+  if (cont > 1000){
+      cont = 0;
+      if(LEDRED==0) LEDRED=1;
+      else LEDRED=0;
+  }
+  cont++;
+  ADCON1bits.ADON = 1;
+  LEDRED =1;
+  IFS1bits.T4IF = 0;
+
+}
+
+void Clear_buffer(ydata unsigned **input,const unsigned BUFFFER_SIZE){
+           unsigned CHANNEL = 0;
+           unsigned BUFFER_INDEX = 0;
+           for(CHANNEL = 0;CHANNEL<N_CHANNEL;CHANNEL++){
+                  for(BUFFER_INDEX = 0;BUFFER_INDEX<BUFFFER_SIZE;BUFFER_INDEX++){
+                    input[CHANNEL][BUFFER_INDEX] = 0;
+                    }
+           }
+}
+
+
+void main() {
+                inext  = 0;                            // Initialize buffer index
+                Clear_buffer(input, BUFFFER_SIZE);    // Clear input buffer
+                PR1        = 0x0071;                   // Sampling ~= 80 kHz. The value of 250 is calculated for 80MHz clock. ???
+
+                adc_init();
+                tmr4_init();
+}
