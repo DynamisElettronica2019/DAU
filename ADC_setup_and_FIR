@@ -7,11 +7,12 @@
 #define LEDBLUE LATGbits.LATG12
 
 
-//Sampling Frequency: 22050 Hz
+//     Device clock: 020.000000 MHz
+//     Sampling Frequency: 5000 Hz
 // Filter setup:
 //     Filter kind: FIR
 //     Filter type: Lowpass filter
-//     Filter order: 40
+//     Filter order: 10
 //     Filter window: Kaiser
 //     Filter borders:
 //       Wpass:4000 Hz
@@ -23,17 +24,13 @@
 //       Wp2: 7500 Hz
 //       Ws2: 8000 Hz
 const unsigned BUFFFER_SIZE  = 32;
-const unsigned FILTER_ORDER  = 40;
+const unsigned FILTER_ORDER  = 10;
 const unsigned N_CHANNEL = 16;
 
 const unsigned COEFF_B[FILTER_ORDER+1] = {
-      0xFFFB, 0x0029, 0x0025, 0xFFA1, 0xFF7F, 0x0095,
-      0x013C, 0xFF66, 0xFD92, 0x001D, 0x0419, 0x0155,
-      0xF9E1, 0xFB9B, 0x083F, 0x0A52, 0xF5DE, 0xE8CA,
-      0x0B6F, 0x501B, 0x741A, 0x501B, 0x0B6F, 0xE8CA,
-      0xF5DE, 0x0A52, 0x083F, 0xFB9B, 0xF9E1, 0x0155,
-      0x0419, 0x001D, 0xFD92, 0xFF66, 0x013C, 0x0095,
-      0xFF7F, 0xFFA1, 0x0025, 0x0029, 0xFFFB};
+      0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x6666,
+      0x0000, 0x0000, 0x0000, 0x0000, 0x0000};
+
 
 
 unsigned inext;                                  // Input buffer index
