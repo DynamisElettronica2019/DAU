@@ -1,0 +1,198 @@
+#include <stdio.h>
+#include <stdint.h>
+#include "d_can.h"
+#include "can.c"
+
+
+#define LEDRED LATGbits.LATG14
+#define LEDBLUE LATGbits.LATG12
+
+
+//     Device clock: 020.000000 MHz
+//     Sampling Frequency: 5000 Hz
+// Filter setup:
+//     Filter kind: FIR
+//     Filter type: Lowpass filter
+//     Filter order: 10
+//     Filter window: Kaiser
+//     Filter borders:
+//       Wpass:4000 Hz
+//       Ap: 1 dB
+//       As: 60 dB
+//       Aa: 1 dB
+//       Wp: 4000 Hz
+//       Ws: 6000 Hz
+//       Wp2: 7500 Hz
+//       Ws2: 8000 Hz
+const unsigned BUFFFER_SIZE  = 32;
+const unsigned FILTER_ORDER  = 10;
+const unsigned N_CHANNEL = 16;
+
+const unsigned COEFF_B[FILTER_ORDER+1] = {
+      0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x6666,
+      0x0000, 0x0000, 0x0000, 0x0000, 0x0000};
+
+
+unsigned inext;                                  // Input buffer index
+ydata unsigned input[N_CHANNEL][BUFFFER_SIZE];   // Input buffer, must be in Y data space
+int16_t data_buffer[N_CHANNEL];                  // Current value buffer, to be sent via bus
+int16_t data_buffer_raw[N_CHANNEL];              // Contiene i valori acquisiti dagli adc prima del filtraggio, serve per la prova del codice
+unsigned cont = 0;
+
+void blink_led(){
+LEDBLUE = 0;
+LEDRED = 0;
+delay_ms(500);
+
+LEDBLUE = 1;
+LEDRED = 1;
+delay_ms(5000);
+}
+
+void adc_init(){
+
+IEC0bits.ADIE     = 0b1;               //adc interrupt enable
+IPC2bits.ADIP     = 0b001;             //adc interrupt priority
+IFS0bits.ADIF     = 0b0;               //clear interrupt flag
+
+ADPCFG            = 0b000000000000000; //All Analog input pin in Analog mode, port read input disabled, A/D samples pin voltage
+ADCON3bits.ADCS   = 0b011011;          //set Tad of the ADC          x27Tcy
+ADCON3bits.ADRC   = 0b0;              // clock from system
+ADCON3bits.SAMC   = 0b00010;          // 2Tad
+
+ADCON2bits.ALTS   = 0b0;              //Always use MUX A input multiplexer settings
+ADCON2bits.BUFM   = 0b0;              //Buffer configured as one 16-word buffer ADCBUF(15...0)
+ADCON2bits.SMPI   = 0b1111;            //Interrupts at the completion of conversion for each 16th sample/convert sequence
+ADCON2bits.CSCNA  = 0b1;              //Scan inputs
+ADCON2bits.VCFG   = 0b000;            //internal voltage reference VDD
+
+ADCON1bits.ASAM   = 0b1;              // Sampling begins immediately after last conversion completes. SAMP bit is auto set
+ADCON1bits.SSRC   = 0b111;            //Internal counter ends sampling and starts conversion (auto convert)
+ADCON1bits.FORM   = 0b00;             //data output integer
+ADCON1bits.ADSIDL = 0b0;              // Continue module operation in Idle mode
+ADCON1bits.ADON   = 0b0;
+
+ADCSSL = 0xFFFF;     //scan ALL inputs
+ADCHSbits.CH0NA = 0; //negative input for sampling Vref-
+
+}
+
+void tmr4_init(){
+
+T4CONbits.TON   = 0b1;
+T4CONbits.TSIDL = 0b0;     //Continue timer operation in Idle mode
+T4CONbits.TGATE = 0b0;     //no gated time
+T4CONbits.TCKPS = 0b00;    //prescaler
+T4CONbits.TCS = 0b0;       //Internal clock (FOSC/4)
+
+T4CONbits.T32 = 0b0;       //16 bit timer, separated from timer5
+IPC5bits.T4IP = 0b011;     //interrupt priority 3
+IFS1bits.T4IF = 0b0;       //clear interrupt
+IEC1bits.T4IE = 0b1;       //enable interrupt
+
+TMR4 = 0;
+PR4  = 20000;         /*credo sia da sistemare questo valore, non so se è coerente con l'acquisizione a 5khz che facciamo*/
+}
+
+void TIMER1_INT() iv IVT_ADDR_T1INTERRUPT ics ICS_AUTO {
+int temp = 0;
+int channel = 0;
+/*codice scritto unicamente per la simulazione dei filtri fir*/
+for (temp = 0;temp < 4 ; temp ++){
+      for(CHANNEL = temp*4 ;CHANNEL< 4 + temp*4 ;CHANNEL ++){
+                     Can_addIntToWritePacket(data_buffer_raw[CHANNEL]);        /*invio i dati raw*/
+      }
+      /*Can_write(ID);                                                          che ID inserisco per far leggere i dati alla dcu?*/
+      
+      for(CHANNEL = temp*4 ;CHANNEL< 4 + temp*4 ;CHANNEL ++){
+                     Can_addIntToWritePacket(data_buffer[CHANNEL]);            /*invio i dati filtrati*/
+      }
+      /*Can_write(ID); */
+  }
+
+}
+
+void tmr1_init(){
+
+T1CONbits.TON = 0;
+TMR1 = 0x0000;             //reset tmr1
+PR1 =25000;                //setto la frequenza del timer1 con prescaler 1:8
+T1CONbits.TCS=0;           //internal clock source
+T1CONbits.TCKPS = 0b01;    //prescaler 1:8
+T1CONbits.TGATE = 0;       //no gated time
+IPC0bits.T1IP = 0b100;     //timer1 interrupt priority 4
+
+IFS0bits.T1IF = 0;   //clear timer1 interrupt flag
+IEC0bits.T1IE = 1;   //timer1 interrupt enable
+
+}
+
+void ADC_INT() iv IVT_ADDR_ADCINTERRUPT ics ICS_AUTO {
+  unsigned CurrentValue;
+  unsigned CHANNEL = 0;
+  int16_t *buffer_adc = &ADCBUF0;
+  for (CHANNEL=0;CHANNEL<N_CHANNEL;CHANNEL++)
+  {
+        input[CHANNEL][inext] = *buffer_adc;          // Fetch sample
+
+        
+
+        /*parte necessaria per la simulazione: start*/
+        
+        data_buffer_raw[N_CHANNEL] =   input[CHANNEL][inext];
+        
+        /*parte necessaria per la simulazione: end*/
+        
+        CurrentValue = FIR_Radix(FILTER_ORDER+1,      // Filter order
+                                  COEFF_B,            // b coefficients of the filter
+                                  BUFFFER_SIZE,       // Input buffer length
+                                  input[CHANNEL],     // Input buffer
+                                  inext);             // Current sample
+                                  
+        data_buffer[CHANNEL] = CurrentValue;          //saves the data in the data_buffer
+        buffer_adc++;                                 //goes to the next memory location
+  }
+  
+  inext = (inext+1) & (BUFFFER_SIZE-1);   // inext = (inext + 1) mod BUFFFER_SIZE;
+  IFS0bits.ADIF     = 0b0;                //clear interrupt flag
+}
+
+void TIMER4_INT() iv IVT_ADDR_T4INTERRUPT ics ICS_AUTO {
+
+  if (cont > 1000){
+      cont = 0;
+      if(LEDRED==0) LEDRED=1;
+      else LEDRED=0;
+  }
+  cont++;
+  ADCON1bits.ADON = 1;
+  LEDRED =1;
+  IFS1bits.T4IF = 0;
+
+}
+
+void Clear_buffer(ydata unsigned **input,const unsigned BUFFFER_SIZE){
+           unsigned CHANNEL = 0;
+           unsigned BUFFER_INDEX = 0;
+           for(CHANNEL = 0;CHANNEL<N_CHANNEL;CHANNEL++){
+                  for(BUFFER_INDEX = 0;BUFFER_INDEX<BUFFFER_SIZE;BUFFER_INDEX++){
+                    input[CHANNEL][BUFFER_INDEX] = 0;
+                    }
+           }
+}
+
+void can_bus_init(){
+ CAN_Init();
+ Can_resetWritePacket();
+}
+
+
+
+void main() {
+                inext  = 0;                            // Initialize buffer index
+                Clear_buffer(input, BUFFFER_SIZE);     // Clear input buffer
+                adc_init();
+                tmr4_init();
+                can_bus_init();
+                tmr1_init();
+}
