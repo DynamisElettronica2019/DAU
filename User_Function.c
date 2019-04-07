@@ -61,16 +61,6 @@
 #define IR_FR_2
 #define IR_FR_3
 
-/*define degli ID da inviare su CAN*/
-
-#define DAU_REAR_ID
-#define IR_RL_ID
-#define IR_RR_ID
-#define DAU_FR_ID
-#define DAU_FR_APPS_ID
-#define IR_FR_ID
-#define DAU_FL_ID
-#define IR_FL_ID
 
 
 

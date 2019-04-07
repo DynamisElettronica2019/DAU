@@ -30,7 +30,7 @@ static unsigned CurrentValue;
 static unsigned CHANNEL = 0;
 static unsigned ADC_CONT, TMR5_CONT = 0;
 
-ydata unsigned input[N_CHANNEL][BUFFFER_SIZE];             	// Input buffer, must be in Y data space
+ydata unsigned input[N_CHANNEL][BUFFER_SIZE];             	// Input buffer, must be in Y data space
 int16_t data_buffer[N_CHANNEL];                 		    // Current value buffer, da essere inviato tramite bus
 int16_t *buffer_adc;
 
