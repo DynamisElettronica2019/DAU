@@ -48,7 +48,7 @@ void canInterrupt() iv IVT_ADDR_C1INTERRUPT ics ICS_AUTO {
 
 void TIMER5_INT() iv IVT_ADDR_T5INTERRUPT ics ICS_AUTO { //fare lo switch dau
 
-  switch (DAU){
+  switch (DAU_ID){
 
   	case DAU_REAR : 
 
@@ -131,13 +131,13 @@ void ADC_INT() iv IVT_ADDR_ADCINTERRUPT ics ICS_AUTO {  //non vorrei che le oper
 
 		input[Channel_Index][inext] = *buffer_adc + Channel_Index;          // Fetch sample
 
-	    CurrentValue = FIR_Radix(FILTER_ORDER+1,      		// ordine del filtro
-	                              COEFF_B,            		// coefficenti del filtro
-	                              BUFFFER_SIZE,       		// lunghezza del buffer
-	                              input[Channel_Index],     // Input buffer
-	                              inext);            		// sample corrente
+	    CurrentValue = FIR_Radix(FILTER_ORDER+1,      		                // ordine del filtro
+	                              COEFF_B,            		                // coefficenti del filtro
+	                              BUFFFER_SIZE,       		                // lunghezza del buffer
+	                              input[Channel_Index],                   // Input buffer
+	                              inext);            		                  // sample corrente
 
-	    data_buffer[Channel_Index] = CurrentValue;          //salvo i dati filtrati nel buffer
+	    data_buffer[Channel_Index] = CurrentValue;                        //salvo i dati filtrati nel buffer
 	}
 
 	inext = (inext+1) & (BUFFFER_SIZE-1);   			    // inext = (inext + 1) mod BUFFFER_SIZE;
@@ -161,37 +161,32 @@ void TIMER4_INT() iv IVT_ADDR_T4INTERRUPT ics ICS_AUTO {
 
 
 void main() {
-
-/*inizializzo le periferiche con le rispettive porte di I/O settate analog/digital*/
-LATG=1;
-ADPCFG = 0xffff;
-TRISG = 0;
-TRISB = 0xffff;
-                   
-Clear_buffer(Input);        
-DAU_ID_CHECK =  dau_set_ID(&DAU_ID);                     
-ADC_CHECK    =  adc_init();
-tmr4_init();
-can_bus_init();
-tmr5_init();
+                  
+  Clear_buffer(Input);        
+  DAU_ID_CHECK =  dau_set_ID(&DAU_ID);                     
+  ADC_CHECK    =  adc_init();
+  tmr4_init();
+  can_bus_init();
+  tmr5_init();
+  io_init();
 
 
 	while(1){          
 
 		if (DAU_ID_CHECK == DAU_ID_ERROR) 
-		{
-			set_LEDRED();
-			set_LEDBLUE();
-			delay_ms(1000);
-			DAU_STATE_BUFFER[DAU_LOCATION] = DAU_ID_CHECK;
-			DAU_ID_CHECK =  dau_set_ID(&DAU_ID);
-		}
+  		{
+  			set_LEDRED();
+  			set_LEDBLUE();
+  			delay_ms(1000);
+  			DAU_STATE_BUFFER[DAU_LOCATION] = DAU_ID_CHECK;
+  			DAU_ID_CHECK =  dau_set_ID(&DAU_ID);
+  		}
 
 		if (ADC_CHECK == ADC_ERROR)
-		{
-			DAU_STATE_BUFFER[ADC_STATE] = ADC_ERROR;
-			ADC_CHECK    =  adc_init();
-		}
+  		{
+  			DAU_STATE_BUFFER[ADC_STATE] = ADC_ERROR;
+  			ADC_CHECK    =  adc_init();
+  		}
 		
 	}
 
