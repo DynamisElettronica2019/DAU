@@ -1,74 +1,10 @@
 #include <stdio.h>
 #include <stdint.h>
 #include "d_can.h"
-#include "can.c"
-
-
-#define LEDRED   LATGbits.LATG12
-#define LEDBLUE  LATGbits.LATG13
-#define LEDGREEN LATGbits.LATG14
-
-#define SELBIT0 PORTFbits.RF4
-#define SELBIT1 PORTFbits.RF5
-
-/*define per verifica errori*/
-#define DAU_ID_OK 0
-#define DAU_ID_ERROR 1
-#define ADC_OK 0
-#define ADC_ERROR 1
-
-/*define per il buffer di stato*/
-#define DAU_STATE_BUFFER_LENGTH 5
-#define DAU_LOCATION 0  			
-#define ADC_STATE 1
-
-
-/*ID per la localizzazione delle schede*/
-#define DAU_FL 0b00
-#define DAU_FR 0b01
-#define DAU_REAR 0b10
-
-/*define dei canali associati ai sensori*/
-
-	/*dau rear*/
-#define LINEAR_RL
-#define LC_L
-#define LINEAR_RR
-#define LC_R
-#define IR_RL_1
-#define IR_RL_2
-#define IR_RL_3
-#define IR_RR_1
-#define IR_RR_2
-#define IR_RR_3
-
-	/*dau front left*/
-#define LINEAR_FL
-#define LC_L
-#define BPS_R
-#define STEER_ANGLE
-#define IR_FL_1
-#define IR_FL_2
-#define IR_FL_3
-
-	/*dau front right*/
-#define LINEAR_FR
-#define LC_L
-#define BPS_F
-#define APPS1
-#define APPS2
-#define IR_FR_1
-#define IR_FR_2
-#define IR_FR_3
-
-
-
-
+#include "User_Function.h"
+#include "can.h"
 
 /*****************************DEFINIZIONE VARIABILI GLOBALI COMUNI**********************************/
-const unsigned BUFFFER_SIZE  = 32;
-const unsigned FILTER_ORDER  = 10;
-const unsigned N_CHANNEL = 16;
 
 
 uint8_t DAU_ID;
@@ -84,14 +20,14 @@ uint8_t DAU_STATE_BUFFER[DAU_STATE_BUFFER_LENGTH];
 
 /*inizializza la matrice che contiene i dati delle acquisizioni*/
 void Clear_buffer(ydata unsigned **input){
-	int Channel_Index, Buffer_Index = 0;
+        int Channel_Index, Buffer_Index = 0;
 
-	for (Channel_Index = 0; Channel_Index < N_CHANNEL; Channel_Index++){
-		for(Buffer_Index = 0; Buffer_Index < BUFFER_SIZE; Buffer_Index++){
+        for (Channel_Index = 0; Channel_Index < N_CHANNEL; Channel_Index++){
+                for(Buffer_Index = 0; Buffer_Index < BUFFER_SIZE; Buffer_Index++){
 
-			input[Channel_Index][Buffer_Index] = 0;
-		}
-	}
+                        input[Channel_Index][Buffer_Index] = 0;
+                }
+        }
 }
 
 /*inizializzazione del timer 5, responsabile della scrittura dati su can @ 100Hz */
@@ -116,8 +52,8 @@ PR5  = 0b0110000110101000;       //25000 * 8 * 50ns -> 0.01 s
 /*inizializzazione del can bus*/
 void can_bus_init(void){          
 
-	CAN_Init();
-	Can_resetWritePacket();
+        CAN_Init();
+        Can_resetWritePacket();
 
 }
 
@@ -176,28 +112,30 @@ PR4  = 0b0000110100000101;       // 3333 * 50ns = 167 us --> 6 KHz
 
 void io_init(void){
 
-	TRISGbits.TRISG12 = 0;             //LED IOPORT AS OUPUT
-	TRISGbits.TRISG13 = 0;
-	TRISGbits.TRISG14 = 0;
+        TRISGbits.TRISG12 = 0;             //LED IOPORT AS OUPUT
+        TRISGbits.TRISG13 = 0;
+        TRISGbits.TRISG14 = 0;
+
+        /*inizializzare le porte degli adc come analog input*/
 
 }
 
 
 
 uint8_t dau_set_ID(uint8_t * DAU_ID){
-	if (SELBIT0 == 0 && SELBIT1 == 0){ 
-		*DAU_ID = DAU_FL;
-		return DAU_ID_OK;
-	}
-	else if (SELBIT0 == 1 && SELBIT1 == 0){
-		*DAU_ID = DAU_FR; 
-		return DAU_ID_OK;
-	}
-	else if(SELBIT0 == 0 && SELBIT1 == 1){
-		*DAU_ID = DAU_REAR;
-		return DAU_ID_OK;
-	}
-	else return DAU_ID_ERROR;
+        if (SELBIT0 == 0 && SELBIT1 == 0){ 
+                *DAU_ID = DAU_FL;
+                return DAU_ID_OK;
+        }
+        else if (SELBIT0 == 1 && SELBIT1 == 0){
+                *DAU_ID = DAU_FR; 
+                return DAU_ID_OK;
+        }
+        else if(SELBIT0 == 0 && SELBIT1 == 1){
+                *DAU_ID = DAU_REAR;
+                return DAU_ID_OK;
+        }
+        else return DAU_ID_ERROR;
 }
 
 
@@ -208,21 +146,25 @@ uint8_t dau_set_ID(uint8_t * DAU_ID){
 void Toggle_LEDRED(void){
 
 if(LEDRED == 0) LEDRED = 1;
-else 			LEDRED = 0;
+else                         LEDRED = 0;
 
 }
 
 void Toggle_LEDBLUE(void){
 
 if(LEDBLUE == 0) LEDBLUE = 1;
-else 			 LEDBLUE = 0;
+else                          LEDBLUE = 0;
 
 }
 
 void Set_LEDRED(void){
-	LEDRED = 1;
+        LEDRED = 1;
 }
 
 void set_LEDBLUE(void){
-	LEDBLUE = 1;
+        LEDBLUE = 1;
+}
+
+void set_LEDGREEN(void){
+        LEDGREEN = 1;
 }

@@ -1,0 +1,36 @@
+main
+	set_LEDGREEN
+	Clear_buffer
+	dau_set_ID
+	adc_init
+	tmr4_init
+	can_bus_init
+		Can_init
+			CAN1Initialize
+				CAN1SetOperationMode
+				CAN1SetBaudRate
+				CAN1SetMask
+					CAN1IDToRegs
+				CAN1SetFilter
+					CAN1IDToRegs
+			CAN1SetOperationMode
+			CAN1SetMask
+			CAN1SetFilter
+			Can_initInterrupt
+			Can_setWritePriority
+		Can_resetWritePacket
+	tmr5_init
+	io_init
+canInterrupt
+	Can_clearInterrupt
+TIMER5_INT
+	Can_resetWritePacket
+	Can_addIntToWritePacket
+		Can_addByteToWritePacket
+	Can_write
+		CAN1Write
+			CAN1IDToRegs
+		Can_getWriteFlags
+TIMER4_INT
+ADC_INT
+	FIR_Radix
