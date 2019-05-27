@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdint.h>
-#include "d_can.h"
+#include "id_can.h"
 #include "User_Function.h"
 #include "can.h"
 
@@ -18,17 +18,7 @@ uint8_t DAU_STATE_BUFFER[DAU_STATE_BUFFER_LENGTH];
 
 
 
-/*inizializza la matrice che contiene i dati delle acquisizioni*/
-void Clear_buffer(ydata unsigned **input){
-        int Channel_Index, Buffer_Index = 0;
 
-        for (Channel_Index = 0; Channel_Index < N_CHANNEL; Channel_Index++){
-                for(Buffer_Index = 0; Buffer_Index < BUFFER_SIZE; Buffer_Index++){
-
-                        input[Channel_Index][Buffer_Index] = 0;
-                }
-        }
-}
 
 /*inizializzazione del timer 5, responsabile della scrittura dati su can @ 100Hz */
 void tmr5_init(void){
@@ -39,13 +29,13 @@ T5CONbits.TGATE = 0b0;     //no gated time
 T5CONbits.TCKPS = 0b01;    //prescaler 8
 T5CONbits.TCS   = 0b0;     //Internal clock (FOSC/4)
 
-IPC5bits.T5IP = 0b011;     //interrupt priority 3
+IPC5bits.T5IP = 0b011;     //interrupt priority 3  ALTA
 
 IFS1bits.T5IF = 0b0;       //clear interrupt
 IEC1bits.T5IE = 0b1;       //enable interrupt
 
 TMR5 = 0b0;
-PR5  = 0b0110000110101000;       //25000 * 8 * 50ns -> 0.01 s
+PR5  = 24500;       //25000 * 8 * 50ns -> 0.01 s     //24500 per compensare la durata della routine
 
 }
 
@@ -61,7 +51,7 @@ void can_bus_init(void){
 uint8_t adc_init(void){
 
 IEC0bits.ADIE     = 0b1;               //adc interrupt enable
-IPC2bits.ADIP     = 0b001;             //adc interrupt priority
+IPC2bits.ADIP     = 0b010;             //adc interrupt priority  2 MEDIA
 IFS0bits.ADIF     = 0b0;               //clear interrupt flag
 
 ADPCFG            = 0b000000000000000; //All Analog input pin in Analog mode, port read input disabled, A/D samples pin voltage
@@ -100,7 +90,7 @@ T4CONbits.TCS = 0b0;       //Internal clock (FOSC/4)
 
 
 T4CONbits.T32 = 0b0;       //16 bit timer, separated from timer5
-IPC5bits.T4IP = 0b011;     //interrupt priority 3
+IPC5bits.T4IP = 0b001;     //interrupt priority 1 BASSA
 
 IFS1bits.T4IF = 0b0;       //clear interrupt
 IEC1bits.T4IE = 0b1;       //enable interrupt
@@ -119,7 +109,6 @@ void io_init(void){
         /*inizializzare le porte degli adc come analog input*/
 
 }
-
 
 
 uint8_t dau_set_ID(uint8_t * DAU_ID){

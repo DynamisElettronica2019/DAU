@@ -1,6 +1,6 @@
-#line 1 "C:/Users/SimoGein/Desktop/git/DAU/User_Function.c"
-#line 1 "c:/program files/mikroc pro for dspic/include/stdio.h"
-#line 1 "c:/program files/mikroc pro for dspic/include/stdint.h"
+#line 1 "C:/Users/Stefano/Google Drive/REPARTO ELETTRONICA 2019/DAU/FIRMWARE/DAU_COMPLETE/test_funzioni_filtraggio/User_Function.c"
+#line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for dspic/include/stdio.h"
+#line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for dspic/include/stdint.h"
 
 
 
@@ -42,12 +42,11 @@ typedef unsigned int uintptr_t;
 
 typedef signed long int intmax_t;
 typedef unsigned long int uintmax_t;
-#line 1 "c:/users/simogein/desktop/git/dau/d_can.h"
-#line 1 "c:/users/simogein/desktop/git/dau/user_function.h"
-#line 1 "c:/program files/mikroc pro for dspic/include/stdio.h"
-#line 1 "c:/program files/mikroc pro for dspic/include/stdint.h"
-#line 53 "c:/users/simogein/desktop/git/dau/user_function.h"
-void Clear_buffer(ydata unsigned **input);
+#line 1 "c:/users/stefano/google drive/reparto elettronica 2019/dau/firmware/dau_complete/test_funzioni_filtraggio/id_can.h"
+#line 1 "c:/users/stefano/google drive/reparto elettronica 2019/dau/firmware/dau_complete/test_funzioni_filtraggio/user_function.h"
+#line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for dspic/include/stdio.h"
+#line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for dspic/include/stdint.h"
+#line 56 "c:/users/stefano/google drive/reparto elettronica 2019/dau/firmware/dau_complete/test_funzioni_filtraggio/user_function.h"
 void tmr5_init(void);
 void can_bus_init(void);
 uint8_t adc_init(void);
@@ -60,8 +59,8 @@ void Toggle_LEDBLUE(void);
 void Set_LEDRED(void);
 void set_LEDBLUE(void);
 void set_LEDGREEN(void);
-#line 1 "c:/users/simogein/desktop/git/dau/can.h"
-#line 48 "c:/users/simogein/desktop/git/dau/can.h"
+#line 1 "c:/users/stefano/google drive/reparto elettronica 2019/dau/firmware/dau_complete/test_funzioni_filtraggio/can.h"
+#line 48 "c:/users/stefano/google drive/reparto elettronica 2019/dau/firmware/dau_complete/test_funzioni_filtraggio/can.h"
 void Can_init(void);
 
 void Can_read(unsigned long int *id, char dataBuffer[], unsigned int *dataLength, unsigned int *inFlags);
@@ -93,7 +92,7 @@ void Can_clearB1Flag(void);
 void Can_clearInterrupt(void);
 
 void Can_initInterrupt(void);
-#line 10 "C:/Users/SimoGein/Desktop/git/DAU/User_Function.c"
+#line 10 "C:/Users/Stefano/Google Drive/REPARTO ELETTRONICA 2019/DAU/FIRMWARE/DAU_COMPLETE/test_funzioni_filtraggio/User_Function.c"
 uint8_t DAU_ID;
 uint8_t DAU_ID_CHECK =  (uint8_t)1 ;
 uint8_t ADC_CHECK =  (uint8_t)1 ;
@@ -106,16 +105,6 @@ uint8_t DAU_STATE_BUFFER[ (uint8_t)5 ];
 
 
 
-void Clear_buffer(ydata unsigned **input){
- int Channel_Index, Buffer_Index = 0;
-
- for (Channel_Index = 0; Channel_Index <  (uint8_t)16 ; Channel_Index++){
- for(Buffer_Index = 0; Buffer_Index <  (uint8_t)32 ; Buffer_Index++){
-
- input[Channel_Index][Buffer_Index] = 0;
- }
- }
-}
 
 
 void tmr5_init(void){
@@ -132,7 +121,7 @@ IFS1bits.T5IF = 0b0;
 IEC1bits.T5IE = 0b1;
 
 TMR5 = 0b0;
-PR5 = 0b0110000110101000;
+PR5 = 24500;
 
 }
 
@@ -148,7 +137,7 @@ void can_bus_init(void){
 uint8_t adc_init(void){
 
 IEC0bits.ADIE = 0b1;
-IPC2bits.ADIP = 0b001;
+IPC2bits.ADIP = 0b010;
 IFS0bits.ADIF = 0b0;
 
 ADPCFG = 0b000000000000000;
@@ -187,7 +176,7 @@ T4CONbits.TCS = 0b0;
 
 
 T4CONbits.T32 = 0b0;
-IPC5bits.T4IP = 0b011;
+IPC5bits.T4IP = 0b001;
 
 IFS1bits.T4IF = 0b0;
 IEC1bits.T4IE = 0b1;
@@ -206,7 +195,6 @@ void io_init(void){
 
 
 }
-
 
 
 uint8_t dau_set_ID(uint8_t * DAU_ID){

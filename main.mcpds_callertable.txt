@@ -1,9 +1,7 @@
 main
-	set_LEDGREEN
+	io_init
 	Clear_buffer
 	dau_set_ID
-	adc_init
-	tmr4_init
 	can_bus_init
 		Can_init
 			CAN1Initialize
@@ -19,11 +17,23 @@ main
 			Can_initInterrupt
 			Can_setWritePriority
 		Can_resetWritePacket
+	adc_init
+	tmr4_init
 	tmr5_init
-	io_init
 canInterrupt
 	Can_clearInterrupt
 TIMER5_INT
+	FIR_filter
+		ceil
+			_Float2Longint
+			_Long2Float
+			_Compare_Le_Fp
+				_Compare_Fp
+			_AddSub_FP
+		_Divide_32x32
+		_Long2Float
+		_Float2Longint
+		_Multiply_32x32
 	Can_resetWritePacket
 	Can_addIntToWritePacket
 		Can_addByteToWritePacket
@@ -31,6 +41,6 @@ TIMER5_INT
 		CAN1Write
 			CAN1IDToRegs
 		Can_getWriteFlags
+	Toggle_LEDRED
 TIMER4_INT
 ADC_INT
-	FIR_Radix

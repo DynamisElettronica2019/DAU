@@ -482,6 +482,7 @@ ackstat
 ackstat_bit
 acos
 adc_check
+adc_cont
 adc_get_sample_ptr
 adc_init
 adc_int
@@ -1721,6 +1722,7 @@ ch0sb0
 ch0sb1
 ch0sb2
 ch0sb3
+channel
 character8x7
 cke
 cke
@@ -1889,7 +1891,7 @@ cnpu1
 cnpu1bits
 cnpu2
 cnpu2bits
-coeff_b
+coeff
 cofsd
 cofsd
 cofsd_bit
@@ -2143,6 +2145,7 @@ da
 da
 da_bit
 data_buffer
+data_out
 dau_id
 dau_id_check
 dau_set_id
@@ -3607,6 +3610,8 @@ filhit1
 filhit1
 filhit2
 filhit2
+filter_factor
+fir_filter
 fir_radix
 flash_erase32
 flash_read4
@@ -4495,7 +4500,6 @@ ilr1
 ilr2
 ilr3
 imagefileasarray
-input
 int0ep
 int0ep
 int0ep_bit
@@ -8982,6 +8986,7 @@ tgate_t5con_bit
 time_datediff
 time_datetoepoch
 time_epochtodate
+time_index
 time_jd1970
 timer4_int
 timer5_int
@@ -9190,6 +9195,7 @@ tmr5_8
 tmr5_8_bit
 tmr5_9
 tmr5_9_bit
+tmr5_cont
 tmr5_init
 tmr5hld
 tmr5hld_0

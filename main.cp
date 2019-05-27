@@ -1,6 +1,6 @@
-#line 1 "C:/Users/SimoGein/Desktop/git/DAU/main.c"
-#line 1 "c:/program files/mikroc pro for dspic/include/stdio.h"
-#line 1 "c:/program files/mikroc pro for dspic/include/stdint.h"
+#line 1 "C:/Users/Stefano/Google Drive/REPARTO ELETTRONICA 2019/DAU/FIRMWARE/DAU_COMPLETE/test_funzioni_filtraggio/main.c"
+#line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for dspic/include/stdio.h"
+#line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for dspic/include/stdint.h"
 
 
 
@@ -42,11 +42,10 @@ typedef unsigned int uintptr_t;
 
 typedef signed long int intmax_t;
 typedef unsigned long int uintmax_t;
-#line 1 "c:/users/simogein/desktop/git/dau/user_function.h"
-#line 1 "c:/program files/mikroc pro for dspic/include/stdio.h"
-#line 1 "c:/program files/mikroc pro for dspic/include/stdint.h"
-#line 53 "c:/users/simogein/desktop/git/dau/user_function.h"
-void Clear_buffer(ydata unsigned **input);
+#line 1 "c:/users/stefano/google drive/reparto elettronica 2019/dau/firmware/dau_complete/test_funzioni_filtraggio/user_function.h"
+#line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for dspic/include/stdio.h"
+#line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for dspic/include/stdint.h"
+#line 56 "c:/users/stefano/google drive/reparto elettronica 2019/dau/firmware/dau_complete/test_funzioni_filtraggio/user_function.h"
 void tmr5_init(void);
 void can_bus_init(void);
 uint8_t adc_init(void);
@@ -59,9 +58,9 @@ void Toggle_LEDBLUE(void);
 void Set_LEDRED(void);
 void set_LEDBLUE(void);
 void set_LEDGREEN(void);
-#line 1 "c:/users/simogein/desktop/git/dau/d_can.h"
-#line 1 "c:/users/simogein/desktop/git/dau/can.h"
-#line 48 "c:/users/simogein/desktop/git/dau/can.h"
+#line 1 "c:/users/stefano/google drive/reparto elettronica 2019/dau/firmware/dau_complete/test_funzioni_filtraggio/id_can.h"
+#line 1 "c:/users/stefano/google drive/reparto elettronica 2019/dau/firmware/dau_complete/test_funzioni_filtraggio/can.h"
+#line 48 "c:/users/stefano/google drive/reparto elettronica 2019/dau/firmware/dau_complete/test_funzioni_filtraggio/can.h"
 void Can_init(void);
 
 void Can_read(unsigned long int *id, char dataBuffer[], unsigned int *dataLength, unsigned int *inFlags);
@@ -93,23 +92,42 @@ void Can_clearB1Flag(void);
 void Can_clearInterrupt(void);
 
 void Can_initInterrupt(void);
-#line 27 "C:/Users/SimoGein/Desktop/git/DAU/main.c"
+#line 34 "C:/Users/Stefano/Google Drive/REPARTO ELETTRONICA 2019/DAU/FIRMWARE/DAU_COMPLETE/test_funzioni_filtraggio/main.c"
 extern uint8_t DAU_ID;
 
-static unsigned Channel_Index = 0;
-static unsigned inext = 0;
-static unsigned CurrentValue;
-static unsigned CHANNEL = 0;
-static unsigned ADC_CONT, TMR5_CONT = 0;
+int time_index = 0;
+int CHANNEL = 0;
+int ADC_CONT, TMR5_CONT = 0;
 
-ydata unsigned input[ (uint8_t)16 ][ (uint8_t)32 ];
-int16_t data_buffer[ (uint8_t)16 ];
+unsigned long int data_buffer[ 16 ][ 50 +1];
+int16_t data_out[ 16 ];
 int16_t *buffer_adc;
 
 
-const unsigned COEFF_B[ (uint8_t)10 +1] = {
- 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x6666,
- 0x0000, 0x0000, 0x0000, 0x0000, 0x0000};
+unsigned long int coeff[ 50 +1] = { 0, 0, 2, 7, 20, 48, 103, 201, 362, 613, 981, 1498,
+ 2192, 3087, 4194, 5513, 7027, 8698, 10472, 12274, 14019, 15615, 16972, 18007,
+ 18656, 18877, 18656, 18007, 16972, 15615, 14019, 12274, 10472, 8698, 7027,
+ 5513, 4194, 3087, 2192, 1498, 981, 613, 362, 201, 103, 48, 20, 7, 2, 0, 0 };
+
+unsigned long int filter_factor = 299999;
+
+
+
+
+
+int FIR_filter(int Channel_Index_Filter, int time_index_filter){
+ int sample = 0;
+ int result = 0;
+ unsigned long int sum_temp = 0;
+ for (sample=0; sample< 50 +1; sample++){
+ sum_temp += (data_buffer[Channel_Index_Filter][sample])*(coeff[time_index_filter]);
+ if (time_index_filter == 0) time_index_filter =  50 ;
+ else time_index_filter--;
+ }
+
+ result = ceil(sum_temp/filter_factor);
+ return result;
+}
 
 
 
@@ -118,108 +136,137 @@ void canInterrupt() iv IVT_ADDR_C1INTERRUPT ics ICS_AUTO {
  Can_clearInterrupt();
 }
 
+
+
 void TIMER5_INT() iv IVT_ADDR_T5INTERRUPT ics ICS_AUTO {
+
+ int t_send = time_index;
+ int Channel_Index_send = 0;
+
+ for (Channel_Index_send = 0; Channel_Index_send <  16 ; Channel_Index_send++){
+ data_out[Channel_Index_send] = FIR_filter(Channel_Index_send, t_send);
+ }
 
  switch (DAU_ID){
 
  case  0b10  :
 
  Can_resetWritePacket();
- Can_addIntToWritePacket(data_buffer[ (uint8_t) 1 ]);
- Can_addIntToWritePacket(data_buffer[ (uint8_t) 2 ]);
- Can_addIntToWritePacket(data_buffer[ (uint8_t) 3 ]);
- Can_addIntToWritePacket(data_buffer[ (uint8_t) 4 ]);
- Can_write( 0b11001010010 );
+ Can_addIntToWritePacket(data_out[ (uint8_t) 2 ]);
+ Can_addIntToWritePacket(data_out[ (uint8_t) 0 ]);
+ Can_addIntToWritePacket(data_out[ (uint8_t) 3 ]);
+ Can_addIntToWritePacket(data_out[ (uint8_t) 1 ]);
+ Can_write( 0x652 );
 
  Can_resetWritePacket();
- Can_addIntToWritePacket(data_buffer[ (uint8_t) 7 ]);
- Can_addIntToWritePacket(data_buffer[ (uint8_t) 8 ]);
- Can_addIntToWritePacket(data_buffer[ (uint8_t) 9 ]);
- Can_write( 0b11001010110 );
+ Can_addIntToWritePacket(data_out[ (uint8_t) 8 ]);
+ Can_addIntToWritePacket(data_out[ (uint8_t) 9 ]);
+ Can_addIntToWritePacket(data_out[ (uint8_t) 10 ]);
+ Can_addIntToWritePacket(data_out[ (uint8_t) 4 ]);
+ Can_write( 0x656 );
 
  Can_resetWritePacket();
- Can_addIntToWritePacket(data_buffer[ (uint8_t) 10 ]);
- Can_addIntToWritePacket(data_buffer[ (uint8_t) 11 ]);
- Can_addIntToWritePacket(data_buffer[ (uint8_t) 12 ]);
- Can_write( 0b11001010111 );
+ Can_addIntToWritePacket(data_out[ (uint8_t) 11 ]);
+ Can_addIntToWritePacket(data_out[ (uint8_t) 12 ]);
+ Can_addIntToWritePacket(data_out[ (uint8_t) 13 ]);
+ Can_addIntToWritePacket(data_out[ (uint8_t) 5 ]);
+ Can_write( 0x657 );
+
+ if (TMR5_CONT > 100){
+ TMR5_CONT = 0;
+ Toggle_LEDRED();
+
+ Can_resetWritePacket();
+ Can_addIntToWritePacket(data_out[ (uint8_t) 14 ]);
+ Can_addIntToWritePacket(data_out[ (uint8_t) 15 ]);
+ Can_write( 0x314 );
+ }
 
  break;
 
  case  0b01  :
 
  Can_resetWritePacket();
- Can_addIntToWritePacket(data_buffer[ (uint8_t) 1 ]);
- Can_addIntToWritePacket(data_buffer[ (uint8_t) 2 ]);
- Can_addIntToWritePacket(data_buffer[ (uint8_t) 3 ]);
- Can_write( 0b11001010000 );
+ Can_addIntToWritePacket(data_out[ (uint8_t) 2 ]);
+ Can_addIntToWritePacket(data_out[ (uint8_t) 0 ]);
+ Can_addIntToWritePacket(data_out[ (uint8_t) 4 ]);
+ Can_addIntToWritePacket(data_out[ (uint8_t) 5 ]);
+ Can_write( 0x650 );
+
+
 
  Can_resetWritePacket();
- Can_addIntToWritePacket(data_buffer[ (uint8_t) 4 ]);
- Can_addIntToWritePacket(data_buffer[ (uint8_t) 5 ]);
- Can_write( 0b11001010011 );
+ Can_addIntToWritePacket(data_out[ (uint8_t) 8 ]);
+ Can_addIntToWritePacket(data_out[ (uint8_t) 9 ]);
+ Can_addIntToWritePacket(data_out[ (uint8_t) 10 ]);
+ Can_addIntToWritePacket(data_out[ (uint8_t) 3 ]);
+ Can_write( 0x655 );
+
+ if (TMR5_CONT > 100){
+ TMR5_CONT = 0;
+ Toggle_LEDRED();
 
  Can_resetWritePacket();
- Can_addIntToWritePacket(data_buffer[ (uint8_t) 7 ]);
- Can_addIntToWritePacket(data_buffer[ (uint8_t) 8 ]);
- Can_addIntToWritePacket(data_buffer[ (uint8_t) 9 ]);
- Can_write( 0b11001010101 );
+ Can_addIntToWritePacket(data_out[ (uint8_t) 14 ]);
+ Can_addIntToWritePacket(data_out[ (uint8_t) 15 ]);
+ Can_write( 0x312 );
+ }
 
  break;
 
  case  0b00  :
 
  Can_resetWritePacket();
- Can_addIntToWritePacket(data_buffer[ (uint8_t) 1 ]);
- Can_addIntToWritePacket(data_buffer[ (uint8_t) 2 ]);
- Can_addIntToWritePacket(data_buffer[ (uint8_t) 3 ]);
- Can_addIntToWritePacket(data_buffer[ (uint8_t) 4 ]);
- Can_write( 0b11001010001 );
+ Can_addIntToWritePacket(data_out[ (uint8_t) 2 ]);
+ Can_addIntToWritePacket(data_out[ (uint8_t) 0 ]);
+ Can_addIntToWritePacket(data_out[ (uint8_t) 4 ]);
+ Can_addIntToWritePacket(data_out[ (uint8_t) 5 ]);
+ Can_write( 0x651 );
 
  Can_resetWritePacket();
- Can_addIntToWritePacket(data_buffer[ (uint8_t) 7 ]);
- Can_addIntToWritePacket(data_buffer[ (uint8_t) 8 ]);
- Can_addIntToWritePacket(data_buffer[ (uint8_t) 9 ]);
- Can_write( 0b11001010100 );
+ Can_addIntToWritePacket(data_out[ (uint8_t) 8 ]);
+ Can_addIntToWritePacket(data_out[ (uint8_t) 9 ]);
+ Can_addIntToWritePacket(data_out[ (uint8_t) 10 ]);
+ Can_addIntToWritePacket(data_out[ (uint8_t) 3 ]);
+ Can_write( 0x654 );
 
+ if (TMR5_CONT > 100){
+ TMR5_CONT = 0;
+ Toggle_LEDRED();
+
+ Can_resetWritePacket();
+ Can_addIntToWritePacket(data_out[ (uint8_t) 14 ]);
+ Can_addIntToWritePacket(data_out[ (uint8_t) 15 ]);
+ Can_write( 0x313 );
+ }
  break;
 
  }
 
 
-if (TMR5_CONT > 1000){
- TMR5_CONT = 0;
- }
+
  TMR5_CONT++;
 
+ ADC_CONT = 0;
  IFS1bits.T5IF = 0;
 
 }
 
 void ADC_INT() iv IVT_ADDR_ADCINTERRUPT ics ICS_AUTO {
+ int Channel_Index = 0;
 
- for (Channel_Index = 0; Channel_Index <  (uint8_t)16 ; Channel_Index ++){
- buffer_adc = &ADCBUF0;
 
- input[Channel_Index][inext] = *buffer_adc + Channel_Index;
-
- CurrentValue = FIR_Radix( (uint8_t)10 +1,
- COEFF_B,
-  (uint8_t)32 ,
- input[Channel_Index],
- inext);
-
- data_buffer[Channel_Index] = CurrentValue;
+ for (Channel_Index = 0; Channel_Index <  16 ; Channel_Index ++){
+ buffer_adc = (&ADCBUF0 + Channel_Index);
+ data_buffer[Channel_Index][time_index] = *buffer_adc;
  }
 
- inext = (inext+1) & ( (uint8_t)32 -1);
- IFS0bits.ADIF = 0b0;
+ if (time_index ==  50 ) time_index = 0;
+ else time_index++;
 
-
- if (ADC_CONT > 1000){
- ADC_CONT = 0;
- }
  ADC_CONT++;
 
+ IFS0bits.ADIF = 0b0;
 }
 
 void TIMER4_INT() iv IVT_ADDR_T4INTERRUPT ics ICS_AUTO {
@@ -230,21 +277,30 @@ void TIMER4_INT() iv IVT_ADDR_T4INTERRUPT ics ICS_AUTO {
 }
 
 
+void Clear_buffer(){
+ int Ch_Index, Buffer_Index = 0;
+ for (Ch_Index = 0; Ch_Index <  16 ; Ch_Index++){
+ for(Buffer_Index = 0; Buffer_Index <  50 +1; Buffer_Index++){
+ data_buffer[Ch_Index][Buffer_Index] = 0;
+ }
+ data_out[Ch_Index]=0;
+ }
+}
+
 void main() {
 
-
- set_LEDGREEN();
- Clear_buffer(Input);
+ io_init();
+ Clear_buffer();
  dau_set_ID(&DAU_ID);
+
+ can_bus_init();
  adc_init();
  tmr4_init();
- can_bus_init();
  tmr5_init();
- io_init();
 
 
  while(1){
-#line 193 "C:/Users/SimoGein/Desktop/git/DAU/main.c"
+#line 257 "C:/Users/Stefano/Google Drive/REPARTO ELETTRONICA 2019/DAU/FIRMWARE/DAU_COMPLETE/test_funzioni_filtraggio/main.c"
  }
 
 }

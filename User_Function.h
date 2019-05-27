@@ -28,29 +28,31 @@
 #define DAU_FR 0b01
 #define DAU_REAR 0b10
 
-/*define dei canali associati ai sensori*/
-#define LC_1                    (uint8_t) 1
-#define LC_2                    (uint8_t) 2
-#define IN_1                    (uint8_t) 3
-#define IN_2                    (uint8_t) 4
-#define IN_5_J3                 (uint8_t) 5
-#define IN_6_J4                 (uint8_t) 6
-#define IR1                     (uint8_t) 7
-#define IR2                     (uint8_t) 8
-#define IR3                     (uint8_t) 9
-#define IR4                     (uint8_t) 10
-#define IR5                     (uint8_t) 11
-#define IR6                     (uint8_t) 12
-#define CURRENT_SENSE           (uint8_t) 13
-#define TEMP_SENSE              (uint8_t) 14
-
-#define BUFFER_SIZE  			(uint8_t)32
-#define FILTER_ORDER 			(uint8_t)10
-#define N_CHANNEL  				(uint8_t)16
+/*define dei canali associati ai sensori*/               //MODIFICATE LE DEFINE, DA RICONTROLLARE
+#define LC_1                    (uint8_t) 0
+#define LC_2                    (uint8_t) 1
+#define IN_1                    (uint8_t) 2
+#define IN_2                    (uint8_t) 3
+#define IN_5_J3                 (uint8_t) 4
+#define IN_6_J4                 (uint8_t) 5
+#define IR1                     (uint8_t) 8
+#define IR2                     (uint8_t) 9
+#define IR3                     (uint8_t) 10
+#define IR4                     (uint8_t) 11
+#define IR5                     (uint8_t) 12
+#define IR6                     (uint8_t) 13
+#define CURRENT_SENSE           (uint8_t) 14
+#define TEMP_SENSE              (uint8_t) 15
 
 
+/*define dei parametri utilizzati per calcolari i coefficienti del filtro*/
+//Fs = 5 KHz
+//Fc = 100 Hz   frequenza di taglio
+#define FILTER_ORDER                       50
+#define N_CHANNEL                          16
 
-void Clear_buffer(ydata unsigned **input);
+/**************************************************************************/
+
 void tmr5_init(void);
 void can_bus_init(void);
 uint8_t adc_init(void);
@@ -63,6 +65,7 @@ void Toggle_LEDBLUE(void);
 void Set_LEDRED(void);
 void set_LEDBLUE(void);
 void set_LEDGREEN(void);
+
 
 
 
