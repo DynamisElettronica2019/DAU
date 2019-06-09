@@ -31,8 +31,8 @@ File0=main.c
 File1=User_Function.c
 File2=User_Function.h
 File3=can.h
-File4=..\..\test_dau\DAU_DEVELOPMENT_15_05_nofir\main.c
-File5=id_can.h
+File4=id_can.h
+File5=can.c
 [EEPROM]
 Count=0
 [ACTIVE_COMMENTS_FILES]
@@ -40,20 +40,21 @@ Count=0
 [OTHER_FILES]
 Count=0
 [SEARCH_PATH]
-Count=11
-Path0=C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for dsPIC\defs\
-Path1=C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for dsPIC\uses\
-Path2=C:\Users\Stefano\Google Drive\REPARTO ELETTRONICA 2019\DAU\FIRMWARE\DAU_COMPLETE\test_funzioni_filtraggio\
-Path3=C:\Users\Stefano\Google Drive\REPARTO ELETTRONICA 2019\DAU\FIRMWARE\FIR\test_funzioni_filtraggio\
-Path4=C:\Users\Stefano\Google Drive\REPARTO ELETTRONICA 2019\DAU\FIRMWARE\FIR\DAU_DEV_20_05_FIR\
-Path5=C:\Users\Stefano\Google Drive\REPARTO ELETTRONICA 2019\DAU\FIRMWARE\test_dau\DAU_DEV_20_05_TEST_FIR\
-Path6=C:\Users\Stefano\Google Drive\REPARTO ELETTRONICA 2019\DAU\FIRMWARE\test_dau\DAU_DEVELOPMENT_15_05\
-Path7=C:\Users\Stefano\Downloads\DAU-development\DAU-development\
-Path8=C:\Program Files\mikroC PRO for dsPIC\Defs\
-Path9=C:\Program Files\mikroC PRO for dsPIC\Uses\
-Path10=C:\Users\SimoGein\Desktop\git\DAU\
+Count=12
+Path0=C:\Program Files\mikroC PRO for dsPIC\defs\
+Path1=C:\Program Files\mikroC PRO for dsPIC\uses\
+Path2=C:\Users\SimoGein\Desktop\git\DAU\DAU\
+Path3=C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for dsPIC\defs\
+Path4=C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for dsPIC\uses\
+Path5=C:\Users\Stefano\Google Drive\REPARTO ELETTRONICA 2019\DAU\FIRMWARE\DAU_COMPLETE\test_funzioni_filtraggio\
+Path6=C:\Users\Stefano\Google Drive\REPARTO ELETTRONICA 2019\DAU\FIRMWARE\FIR\test_funzioni_filtraggio\
+Path7=C:\Users\Stefano\Google Drive\REPARTO ELETTRONICA 2019\DAU\FIRMWARE\FIR\DAU_DEV_20_05_FIR\
+Path8=C:\Users\Stefano\Google Drive\REPARTO ELETTRONICA 2019\DAU\FIRMWARE\test_dau\DAU_DEV_20_05_TEST_FIR\
+Path9=C:\Users\Stefano\Google Drive\REPARTO ELETTRONICA 2019\DAU\FIRMWARE\test_dau\DAU_DEVELOPMENT_15_05\
+Path10=C:\Users\Stefano\Downloads\DAU-development\DAU-development\
+Path11=C:\Users\SimoGein\Desktop\git\DAU\
 [HEADER_PATH]
-Count=8
+Count=9
 Path0=C:\Users\SimoGein\Desktop\DAU_SV1.0\
 Path1=C:\Users\SimoGein\Desktop\git\DAU\
 Path2=C:\Users\Stefano\Downloads\DAU-development\DAU-development\
@@ -62,6 +63,7 @@ Path4=C:\Users\Stefano\Google Drive\REPARTO ELETTRONICA 2019\DAU\FIRMWARE\test_d
 Path5=C:\Users\Stefano\Google Drive\REPARTO ELETTRONICA 2019\DAU\FIRMWARE\FIR\DAU_DEV_20_05_FIR\
 Path6=C:\Users\Stefano\Google Drive\REPARTO ELETTRONICA 2019\DAU\FIRMWARE\FIR\test_funzioni_filtraggio\
 Path7=C:\Users\Stefano\Google Drive\REPARTO ELETTRONICA 2019\DAU\FIRMWARE\DAU_COMPLETE\test_funzioni_filtraggio\
+Path8=C:\Users\SimoGein\Desktop\git\DAU\DAU\
 [HEADERS]
 Count=2
 File0=User_Function.h

@@ -28,6 +28,15 @@
 #define DAU_FR 0b01
 #define DAU_REAR 0b10
 
+/*define per la conversione dei dati debug*/
+#define INA_GAIN		200
+#define SHUNT_RESISTOR	0.03 									/*ohm			*/
+#define TEMP_OFFSET		500										/*mV			*/
+#define TEMP_RATE		10										/*mV			*/
+#define LSB_1000		1.2210012210012210						/*(5V / (2^12 - 1) )*1000*/
+
+
+
 /*define dei canali associati ai sensori*/               //MODIFICATE LE DEFINE, DA RICONTROLLARE
 #define LC_1                    (uint8_t) 0
 #define LC_2                    (uint8_t) 1
@@ -57,6 +66,7 @@ void tmr5_init(void);
 void can_bus_init(void);
 uint8_t adc_init(void);
 void tmr4_init(void);
+void tmr1_init(void);
 void io_init(void);
 uint8_t dau_set_ID(uint8_t * DAU_ID);
 

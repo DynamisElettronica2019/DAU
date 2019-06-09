@@ -8988,6 +8988,7 @@ time_datetoepoch
 time_epochtodate
 time_index
 time_jd1970
+timer1_int
 timer4_int
 timer5_int
 tmode
@@ -9029,6 +9030,8 @@ tmr1_8
 tmr1_8_bit
 tmr1_9
 tmr1_9_bit
+tmr1_cont
+tmr1_init
 tmr2
 tmr2_0
 tmr2_0_bit

@@ -100,6 +100,27 @@ PR4  = 0b0000110100000101;       // 3333 * 50ns = 167 us --> 6 KHz
 
 }
 
+void tmr1_init(void){
+
+T1CONbits.TON   = 0b1;
+T1CONbits.TSIDL = 0b0;     //Continue timer operation in Idle mode
+T1CONbits.TGATE = 0b0;     //no gated time
+T1CONbits.TCKPS = 0b11;    //prescaler : 256
+T1CONbits.TCS = 0b0;       //Internal clock (FOSC/4)
+
+
+IPC0bits.T1IP = 0b011;     //interrupt priority 3 ALTA
+
+IFS0bits.T1IF = 0b0;       //clear interrupt
+IEC0bits.T1IE = 0b1;       //enable interrupt
+
+TMR1 = 0b0;
+PR1  = 0b0011110100001001;       // 15625 * 50ns * 256 = 0.2 s --> 5Hz
+
+}
+
+
+
 void io_init(void){
 
         TRISGbits.TRISG12 = 0;             //LED IOPORT AS OUPUT

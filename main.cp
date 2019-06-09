@@ -1,6 +1,6 @@
-#line 1 "C:/Users/Stefano/Google Drive/REPARTO ELETTRONICA 2019/DAU/FIRMWARE/DAU_COMPLETE/test_funzioni_filtraggio/main.c"
-#line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for dspic/include/stdio.h"
-#line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for dspic/include/stdint.h"
+#line 1 "C:/Users/SimoGein/Desktop/git/DAU/DAU/main.c"
+#line 1 "c:/program files/mikroc pro for dspic/include/stdio.h"
+#line 1 "c:/program files/mikroc pro for dspic/include/stdint.h"
 
 
 
@@ -42,14 +42,15 @@ typedef unsigned int uintptr_t;
 
 typedef signed long int intmax_t;
 typedef unsigned long int uintmax_t;
-#line 1 "c:/users/stefano/google drive/reparto elettronica 2019/dau/firmware/dau_complete/test_funzioni_filtraggio/user_function.h"
-#line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for dspic/include/stdio.h"
-#line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for dspic/include/stdint.h"
-#line 56 "c:/users/stefano/google drive/reparto elettronica 2019/dau/firmware/dau_complete/test_funzioni_filtraggio/user_function.h"
+#line 1 "c:/users/simogein/desktop/git/dau/dau/user_function.h"
+#line 1 "c:/program files/mikroc pro for dspic/include/stdio.h"
+#line 1 "c:/program files/mikroc pro for dspic/include/stdint.h"
+#line 65 "c:/users/simogein/desktop/git/dau/dau/user_function.h"
 void tmr5_init(void);
 void can_bus_init(void);
 uint8_t adc_init(void);
 void tmr4_init(void);
+void tmr1_init(void);
 void io_init(void);
 uint8_t dau_set_ID(uint8_t * DAU_ID);
 
@@ -58,9 +59,9 @@ void Toggle_LEDBLUE(void);
 void Set_LEDRED(void);
 void set_LEDBLUE(void);
 void set_LEDGREEN(void);
-#line 1 "c:/users/stefano/google drive/reparto elettronica 2019/dau/firmware/dau_complete/test_funzioni_filtraggio/id_can.h"
-#line 1 "c:/users/stefano/google drive/reparto elettronica 2019/dau/firmware/dau_complete/test_funzioni_filtraggio/can.h"
-#line 48 "c:/users/stefano/google drive/reparto elettronica 2019/dau/firmware/dau_complete/test_funzioni_filtraggio/can.h"
+#line 1 "c:/users/simogein/desktop/git/dau/dau/id_can.h"
+#line 1 "c:/users/simogein/desktop/git/dau/dau/can.h"
+#line 48 "c:/users/simogein/desktop/git/dau/dau/can.h"
 void Can_init(void);
 
 void Can_read(unsigned long int *id, char dataBuffer[], unsigned int *dataLength, unsigned int *inFlags);
@@ -92,12 +93,12 @@ void Can_clearB1Flag(void);
 void Can_clearInterrupt(void);
 
 void Can_initInterrupt(void);
-#line 34 "C:/Users/Stefano/Google Drive/REPARTO ELETTRONICA 2019/DAU/FIRMWARE/DAU_COMPLETE/test_funzioni_filtraggio/main.c"
+#line 34 "C:/Users/SimoGein/Desktop/git/DAU/DAU/main.c"
 extern uint8_t DAU_ID;
 
 int time_index = 0;
 int CHANNEL = 0;
-int ADC_CONT, TMR5_CONT = 0;
+int ADC_CONT, TMR5_CONT, TMR1_CONT= 0;
 
 unsigned long int data_buffer[ 16 ][ 50 +1];
 int16_t data_out[ 16 ];
@@ -143,6 +144,7 @@ void TIMER5_INT() iv IVT_ADDR_T5INTERRUPT ics ICS_AUTO {
  int t_send = time_index;
  int Channel_Index_send = 0;
 
+
  for (Channel_Index_send = 0; Channel_Index_send <  16 ; Channel_Index_send++){
  data_out[Channel_Index_send] = FIR_filter(Channel_Index_send, t_send);
  }
@@ -172,15 +174,6 @@ void TIMER5_INT() iv IVT_ADDR_T5INTERRUPT ics ICS_AUTO {
  Can_addIntToWritePacket(data_out[ (uint8_t) 5 ]);
  Can_write( 0x657 );
 
- if (TMR5_CONT > 100){
- TMR5_CONT = 0;
- Toggle_LEDRED();
-
- Can_resetWritePacket();
- Can_addIntToWritePacket(data_out[ (uint8_t) 14 ]);
- Can_addIntToWritePacket(data_out[ (uint8_t) 15 ]);
- Can_write( 0x314 );
- }
 
  break;
 
@@ -193,24 +186,12 @@ void TIMER5_INT() iv IVT_ADDR_T5INTERRUPT ics ICS_AUTO {
  Can_addIntToWritePacket(data_out[ (uint8_t) 5 ]);
  Can_write( 0x650 );
 
-
-
  Can_resetWritePacket();
  Can_addIntToWritePacket(data_out[ (uint8_t) 8 ]);
  Can_addIntToWritePacket(data_out[ (uint8_t) 9 ]);
  Can_addIntToWritePacket(data_out[ (uint8_t) 10 ]);
  Can_addIntToWritePacket(data_out[ (uint8_t) 3 ]);
  Can_write( 0x655 );
-
- if (TMR5_CONT > 100){
- TMR5_CONT = 0;
- Toggle_LEDRED();
-
- Can_resetWritePacket();
- Can_addIntToWritePacket(data_out[ (uint8_t) 14 ]);
- Can_addIntToWritePacket(data_out[ (uint8_t) 15 ]);
- Can_write( 0x312 );
- }
 
  break;
 
@@ -230,15 +211,6 @@ void TIMER5_INT() iv IVT_ADDR_T5INTERRUPT ics ICS_AUTO {
  Can_addIntToWritePacket(data_out[ (uint8_t) 3 ]);
  Can_write( 0x654 );
 
- if (TMR5_CONT > 100){
- TMR5_CONT = 0;
- Toggle_LEDRED();
-
- Can_resetWritePacket();
- Can_addIntToWritePacket(data_out[ (uint8_t) 14 ]);
- Can_addIntToWritePacket(data_out[ (uint8_t) 15 ]);
- Can_write( 0x313 );
- }
  break;
 
  }
@@ -250,6 +222,56 @@ void TIMER5_INT() iv IVT_ADDR_T5INTERRUPT ics ICS_AUTO {
  ADC_CONT = 0;
  IFS1bits.T5IF = 0;
 
+}
+
+void TIMER1_INT() iv IVT_ADDR_T1INTERRUPT ics ICS_AUTO {
+
+ float currentConverted, tempConverted = 0;
+ if (TMR1_CONT > 5){
+
+ TMR1_CONT = 0;
+
+
+ currentConverted = (float)data_out[ (uint8_t) 14 ] *  1.2210012210012210 ;
+ currentConverted = (currentConverted/ 200 )/ 0.03 ;
+
+ tempConverted = (float)data_out[ (uint8_t) 15 ] *  1.2210012210012210 ;
+ tempConverted = (tempConverted -  500 )/ 10 ;
+
+ switch (DAU_ID){
+
+
+ case  0b10  :
+ Toggle_LEDRED();
+
+ Can_resetWritePacket();
+ Can_addIntToWritePacket((int)currentConverted);
+ Can_addIntToWritePacket((int)tempConverted);
+ Can_write( 0x314 );
+ break;
+
+ case  0b00  :
+ Toggle_LEDRED();
+
+ Can_resetWritePacket();
+ Can_addIntToWritePacket((int)currentConverted);
+ Can_addIntToWritePacket((int)tempConverted);
+ Can_write( 0x313 );
+ break;
+
+ case  0b01  :
+ Toggle_LEDRED();
+
+ Can_resetWritePacket();
+ Can_addIntToWritePacket((int)currentConverted);
+ Can_addIntToWritePacket((int)tempConverted);
+ Can_write( 0x312 );
+ break;
+ }
+
+ }
+ TMR1_CONT++;
+ IFS0bits.T1IF = 0;
 }
 
 void ADC_INT() iv IVT_ADDR_ADCINTERRUPT ics ICS_AUTO {
@@ -297,10 +319,11 @@ void main() {
  adc_init();
  tmr4_init();
  tmr5_init();
+ tmr1_init();
 
 
  while(1){
-#line 257 "C:/Users/Stefano/Google Drive/REPARTO ELETTRONICA 2019/DAU/FIRMWARE/DAU_COMPLETE/test_funzioni_filtraggio/main.c"
+#line 279 "C:/Users/SimoGein/Desktop/git/DAU/DAU/main.c"
  }
 
 }

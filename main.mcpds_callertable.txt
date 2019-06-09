@@ -20,6 +20,7 @@ main
 	adc_init
 	tmr4_init
 	tmr5_init
+	tmr1_init
 canInterrupt
 	Can_clearInterrupt
 TIMER5_INT
@@ -41,6 +42,16 @@ TIMER5_INT
 		CAN1Write
 			CAN1IDToRegs
 		Can_getWriteFlags
-	Toggle_LEDRED
 TIMER4_INT
 ADC_INT
+TIMER1_INT
+	Toggle_LEDRED
+	Can_resetWritePacket
+	Can_addIntToWritePacket
+	Can_write
+	_Long2Float
+	_Mul_FP
+	_Div_FP
+	_Sub_FP
+		_AddSub_FP
+	_Float2Longint
