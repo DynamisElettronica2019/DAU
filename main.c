@@ -170,10 +170,10 @@ void TIMER1_INT() iv IVT_ADDR_T1INTERRUPT ics ICS_AUTO {			//interrupt responsab
 
 		/*converto i valori di debug*/
 		currentConverted = (float)data_out[CURRENT_SENSE] * LSB_1000;			//vout in mV
-		currentConverted = (currentConverted/INA_GAIN)/SHUNT_RESISTOR; 	//risultato in mA
+		currentConverted = (currentConverted/INA_GAIN)/SHUNT_RESISTOR; 			//risultato in mA
 
 		tempConverted = (float)data_out[TEMP_SENSE] * LSB_1000;					//Vout in mV
-		tempConverted = (tempConverted - TEMP_OFFSET)/TEMP_RATE;		//Temp											
+		tempConverted = (tempConverted - TEMP_OFFSET)/TEMP_RATE;				//risultato in gradi										
 
 		switch (DAU_ID){
 

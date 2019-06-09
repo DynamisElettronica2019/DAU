@@ -362,7 +362,7 @@ L__TIMER1_INT42:
 	MOV	#18885, W2
 	MOV	#16284, W3
 	CALL	__Mul_FP
-;main.c,173 :: 		currentConverted = (currentConverted/INA_GAIN)/SHUNT_RESISTOR; 	//risultato in mA
+;main.c,173 :: 		currentConverted = (currentConverted/INA_GAIN)/SHUNT_RESISTOR; 			//risultato in mA
 	MOV	#0, W2
 	MOV	#17224, W3
 	CALL	__Div_FP
@@ -379,7 +379,7 @@ L__TIMER1_INT42:
 	MOV	#18885, W2
 	MOV	#16284, W3
 	CALL	__Mul_FP
-;main.c,176 :: 		tempConverted = (tempConverted - TEMP_OFFSET)/TEMP_RATE;		//Temp
+;main.c,176 :: 		tempConverted = (tempConverted - TEMP_OFFSET)/TEMP_RATE;				//risultato in gradi
 	MOV	#0, W2
 	MOV	#17402, W3
 	CALL	__Sub_FP

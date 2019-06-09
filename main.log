@@ -35,11 +35,11 @@ hint: 29	1164	Variable 'Can_Init_flags' has been eliminated by optimizer	can.c
 hint: 86	1164	Variable 'sent' has been eliminated by optimizer	can.c
 diagnostics: 0	122	Compilation Started	stdint.h
 diagnostics: 180	123	Compiled Successfully	User_Function.c
-diagnostics: 0	127	All files Compiled in 250 ms	 
+diagnostics: 0	127	All files Compiled in 282 ms	 
 hint: 0	1144	Used RX (bytes): 32 (100%)   Free RX (bytes): 0 (0%)	Used RX (bytes): 32 (100%)   Free RX (bytes): 0 (0%)
 hint: 0	1144	Static RAM (bytes): 3529   Dynamic RAM (bytes): 4662	Static RAM (bytes): 3529   Dynamic RAM (bytes): 4662
 hint: 0	1144	Used ROM (bytes): 4862 (5%)  Free ROM (bytes): 93442 (95%)	Used ROM (bytes): 4862 (5%)  Free ROM (bytes): 93442 (95%)
 diagnostics: 0	125	Project Linked Successfully	main.mcpds
-diagnostics: 0	128	Linked in 469 ms	 
-diagnostics: 0	129	Project 'main.mcpds' completed: 969 ms	 
-diagnostics: 0	103	Finished successfully: 09 giu 2019, 16:13:51	main.mcpds
+diagnostics: 0	128	Linked in 609 ms	 
+diagnostics: 0	129	Project 'main.mcpds' completed: 1125 ms	 
+diagnostics: 0	103	Finished successfully: 09 giu 2019, 16:46:11	main.mcpds
