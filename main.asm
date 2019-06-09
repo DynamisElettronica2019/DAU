@@ -364,7 +364,7 @@ L__TIMER1_INT42:
 	CALL	__Mul_FP
 ;main.c,173 :: 		currentConverted = (currentConverted/INA_GAIN)/SHUNT_RESISTOR; 			//risultato in mA
 	MOV	#0, W2
-	MOV	#17224, W3
+	MOV	#17096, W3
 	CALL	__Div_FP
 	MOV	#49807, W2
 	MOV	#15605, W3

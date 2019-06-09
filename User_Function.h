@@ -29,7 +29,7 @@
 #define DAU_REAR 0b10
 
 /*define per la conversione dei dati debug*/
-#define INA_GAIN		200
+#define INA_GAIN		100
 #define SHUNT_RESISTOR	0.03 									/*ohm			*/
 #define TEMP_OFFSET		500										/*mV			*/
 #define TEMP_RATE		10										/*mV			*/

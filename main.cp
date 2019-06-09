@@ -233,7 +233,7 @@ void TIMER1_INT() iv IVT_ADDR_T1INTERRUPT ics ICS_AUTO {
 
 
  currentConverted = (float)data_out[ (uint8_t) 14 ] *  1.2210012210012210 ;
- currentConverted = (currentConverted/ 200 )/ 0.03 ;
+ currentConverted = (currentConverted/ 100 )/ 0.03 ;
 
  tempConverted = (float)data_out[ (uint8_t) 15 ] *  1.2210012210012210 ;
  tempConverted = (tempConverted -  500 )/ 10 ;
