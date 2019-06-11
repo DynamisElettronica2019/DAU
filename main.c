@@ -91,25 +91,25 @@ void TIMER5_INT() iv IVT_ADDR_T5INTERRUPT ics ICS_AUTO {
           case DAU_REAR :
 
       Can_resetWritePacket();
-      Can_addIntToWritePacket(data_out[IN_1]);
-      Can_addIntToWritePacket(data_out[LC_1]);
-      Can_addIntToWritePacket(data_out[IN_2]);
-      Can_addIntToWritePacket(data_out[LC_2]);
-      Can_write(DAU_REAR_ID);                         //0x652
+      Can_addIntToWritePacket(data_out[IN_1]);			//lineare rear left 
+      Can_addIntToWritePacket(data_out[LC_1]);			//load cell  rear left
+      Can_addIntToWritePacket(data_out[IN_5_J3]);		//lineare rear right
+      Can_addIntToWritePacket(data_out[LC_2]);			//load cell rear rigth
+      Can_write(DAU_REAR_ID);                         	//0x652
 
       Can_resetWritePacket();
       Can_addIntToWritePacket(data_out[IR1]);
       Can_addIntToWritePacket(data_out[IR2]);
       Can_addIntToWritePacket(data_out[IR3]);
-      Can_addIntToWritePacket(data_out[IN_5_J3]);
-      Can_write(DAU_REAR_IR_RL_ID);                   //0x656
+      Can_addIntToWritePacket(data_out[IN_2]);			//BREAKE IR RL
+      Can_write(DAU_REAR_IR_RL_ID);                   	//0x656
 
       Can_resetWritePacket();
       Can_addIntToWritePacket(data_out[IR4]);
       Can_addIntToWritePacket(data_out[IR5]);
       Can_addIntToWritePacket(data_out[IR6]);
-      Can_addIntToWritePacket(data_out[IN_6_J4]);
-      Can_write(DAU_REAR_IR_RR_ID);                   //0x657
+      Can_addIntToWritePacket(data_out[IN_6_J4]);		//BREAKE IR RR
+      Can_write(DAU_REAR_IR_RR_ID);                   	//0x657
 
 
       break;
@@ -182,8 +182,8 @@ void TIMER1_INT() iv IVT_ADDR_T1INTERRUPT ics ICS_AUTO {			//interrupt responsab
 			Toggle_LEDRED();
 
 	        Can_resetWritePacket();
-	        Can_addIntToWritePacket((int)currentConverted);
 	        Can_addIntToWritePacket((int)tempConverted);
+	        Can_addIntToWritePacket((int)currentConverted);
 	        Can_write(DAU_REAR_DEBUG_ID);
 				break;
 
@@ -191,8 +191,8 @@ void TIMER1_INT() iv IVT_ADDR_T1INTERRUPT ics ICS_AUTO {			//interrupt responsab
 			Toggle_LEDRED();
 	         
 	        Can_resetWritePacket();
-	        Can_addIntToWritePacket((int)currentConverted);
 	        Can_addIntToWritePacket((int)tempConverted);
+	        Can_addIntToWritePacket((int)currentConverted);
 	        Can_write(DAU_FL_DEBUG_ID);           //0x313
 				break;
 
@@ -200,8 +200,8 @@ void TIMER1_INT() iv IVT_ADDR_T1INTERRUPT ics ICS_AUTO {			//interrupt responsab
 			Toggle_LEDRED();
 
 	        Can_resetWritePacket();
-	        Can_addIntToWritePacket((int)currentConverted);
 	        Can_addIntToWritePacket((int)tempConverted);
+	        Can_addIntToWritePacket((int)currentConverted);
 	        Can_write(DAU_FR_DEBUG_ID);
 				break;
 		}

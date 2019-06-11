@@ -156,7 +156,7 @@ void TIMER5_INT() iv IVT_ADDR_T5INTERRUPT ics ICS_AUTO {
  Can_resetWritePacket();
  Can_addIntToWritePacket(data_out[ (uint8_t) 2 ]);
  Can_addIntToWritePacket(data_out[ (uint8_t) 0 ]);
- Can_addIntToWritePacket(data_out[ (uint8_t) 3 ]);
+ Can_addIntToWritePacket(data_out[ (uint8_t) 4 ]);
  Can_addIntToWritePacket(data_out[ (uint8_t) 1 ]);
  Can_write( 0x652 );
 
@@ -164,7 +164,7 @@ void TIMER5_INT() iv IVT_ADDR_T5INTERRUPT ics ICS_AUTO {
  Can_addIntToWritePacket(data_out[ (uint8_t) 8 ]);
  Can_addIntToWritePacket(data_out[ (uint8_t) 9 ]);
  Can_addIntToWritePacket(data_out[ (uint8_t) 10 ]);
- Can_addIntToWritePacket(data_out[ (uint8_t) 4 ]);
+ Can_addIntToWritePacket(data_out[ (uint8_t) 3 ]);
  Can_write( 0x656 );
 
  Can_resetWritePacket();
@@ -245,8 +245,8 @@ void TIMER1_INT() iv IVT_ADDR_T1INTERRUPT ics ICS_AUTO {
  Toggle_LEDRED();
 
  Can_resetWritePacket();
- Can_addIntToWritePacket((int)currentConverted);
  Can_addIntToWritePacket((int)tempConverted);
+ Can_addIntToWritePacket((int)currentConverted);
  Can_write( 0x314 );
  break;
 
@@ -254,8 +254,8 @@ void TIMER1_INT() iv IVT_ADDR_T1INTERRUPT ics ICS_AUTO {
  Toggle_LEDRED();
 
  Can_resetWritePacket();
- Can_addIntToWritePacket((int)currentConverted);
  Can_addIntToWritePacket((int)tempConverted);
+ Can_addIntToWritePacket((int)currentConverted);
  Can_write( 0x313 );
  break;
 
@@ -263,8 +263,8 @@ void TIMER1_INT() iv IVT_ADDR_T1INTERRUPT ics ICS_AUTO {
  Toggle_LEDRED();
 
  Can_resetWritePacket();
- Can_addIntToWritePacket((int)currentConverted);
  Can_addIntToWritePacket((int)tempConverted);
+ Can_addIntToWritePacket((int)currentConverted);
  Can_write( 0x312 );
  break;
  }

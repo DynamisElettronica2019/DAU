@@ -154,19 +154,19 @@ L_TIMER5_INT6:
 L_TIMER5_INT10:
 ;main.c,93 :: 		Can_resetWritePacket();
 	CALL	_Can_resetWritePacket
-;main.c,94 :: 		Can_addIntToWritePacket(data_out[IN_1]);
+;main.c,94 :: 		Can_addIntToWritePacket(data_out[IN_1]);			//lineare rear left
 	MOV	_data_out+4, W10
 	CALL	_Can_addIntToWritePacket
-;main.c,95 :: 		Can_addIntToWritePacket(data_out[LC_1]);
+;main.c,95 :: 		Can_addIntToWritePacket(data_out[LC_1]);			//load cell  rear left
 	MOV	_data_out, W10
 	CALL	_Can_addIntToWritePacket
-;main.c,96 :: 		Can_addIntToWritePacket(data_out[IN_2]);
-	MOV	_data_out+6, W10
+;main.c,96 :: 		Can_addIntToWritePacket(data_out[IN_5_J3]);		//lineare rear right
+	MOV	_data_out+8, W10
 	CALL	_Can_addIntToWritePacket
-;main.c,97 :: 		Can_addIntToWritePacket(data_out[LC_2]);
+;main.c,97 :: 		Can_addIntToWritePacket(data_out[LC_2]);			//load cell rear rigth
 	MOV	_data_out+2, W10
 	CALL	_Can_addIntToWritePacket
-;main.c,98 :: 		Can_write(DAU_REAR_ID);                         //0x652
+;main.c,98 :: 		Can_write(DAU_REAR_ID);                         	//0x652
 	MOV	#1618, W10
 	MOV	#0, W11
 	CALL	_Can_write
@@ -181,10 +181,10 @@ L_TIMER5_INT10:
 ;main.c,103 :: 		Can_addIntToWritePacket(data_out[IR3]);
 	MOV	_data_out+20, W10
 	CALL	_Can_addIntToWritePacket
-;main.c,104 :: 		Can_addIntToWritePacket(data_out[IN_5_J3]);
-	MOV	_data_out+8, W10
+;main.c,104 :: 		Can_addIntToWritePacket(data_out[IN_2]);			//BREAKE IR RL
+	MOV	_data_out+6, W10
 	CALL	_Can_addIntToWritePacket
-;main.c,105 :: 		Can_write(DAU_REAR_IR_RL_ID);                   //0x656
+;main.c,105 :: 		Can_write(DAU_REAR_IR_RL_ID);                   	//0x656
 	MOV	#1622, W10
 	MOV	#0, W11
 	CALL	_Can_write
@@ -199,10 +199,10 @@ L_TIMER5_INT10:
 ;main.c,110 :: 		Can_addIntToWritePacket(data_out[IR6]);
 	MOV	_data_out+26, W10
 	CALL	_Can_addIntToWritePacket
-;main.c,111 :: 		Can_addIntToWritePacket(data_out[IN_6_J4]);
+;main.c,111 :: 		Can_addIntToWritePacket(data_out[IN_6_J4]);		//BREAKE IR RR
 	MOV	_data_out+10, W10
 	CALL	_Can_addIntToWritePacket
-;main.c,112 :: 		Can_write(DAU_REAR_IR_RR_ID);                   //0x657
+;main.c,112 :: 		Can_write(DAU_REAR_IR_RR_ID);                   	//0x657
 	MOV	#1623, W10
 	MOV	#0, W11
 	CALL	_Can_write
@@ -396,15 +396,15 @@ L_TIMER1_INT16:
 	CALL	_Toggle_LEDRED
 ;main.c,184 :: 		Can_resetWritePacket();
 	CALL	_Can_resetWritePacket
-;main.c,185 :: 		Can_addIntToWritePacket((int)currentConverted);
-	MOV	[W14+0], W0
-	MOV	[W14+2], W1
+;main.c,185 :: 		Can_addIntToWritePacket((int)tempConverted);
+	MOV	[W14+4], W0
+	MOV	[W14+6], W1
 	CALL	__Float2Longint
 	MOV	W0, W10
 	CALL	_Can_addIntToWritePacket
-;main.c,186 :: 		Can_addIntToWritePacket((int)tempConverted);
-	MOV	[W14+4], W0
-	MOV	[W14+6], W1
+;main.c,186 :: 		Can_addIntToWritePacket((int)currentConverted);
+	MOV	[W14+0], W0
+	MOV	[W14+2], W1
 	CALL	__Float2Longint
 	MOV	W0, W10
 	CALL	_Can_addIntToWritePacket
@@ -420,15 +420,15 @@ L_TIMER1_INT17:
 	CALL	_Toggle_LEDRED
 ;main.c,193 :: 		Can_resetWritePacket();
 	CALL	_Can_resetWritePacket
-;main.c,194 :: 		Can_addIntToWritePacket((int)currentConverted);
-	MOV	[W14+0], W0
-	MOV	[W14+2], W1
+;main.c,194 :: 		Can_addIntToWritePacket((int)tempConverted);
+	MOV	[W14+4], W0
+	MOV	[W14+6], W1
 	CALL	__Float2Longint
 	MOV	W0, W10
 	CALL	_Can_addIntToWritePacket
-;main.c,195 :: 		Can_addIntToWritePacket((int)tempConverted);
-	MOV	[W14+4], W0
-	MOV	[W14+6], W1
+;main.c,195 :: 		Can_addIntToWritePacket((int)currentConverted);
+	MOV	[W14+0], W0
+	MOV	[W14+2], W1
 	CALL	__Float2Longint
 	MOV	W0, W10
 	CALL	_Can_addIntToWritePacket
@@ -444,15 +444,15 @@ L_TIMER1_INT18:
 	CALL	_Toggle_LEDRED
 ;main.c,202 :: 		Can_resetWritePacket();
 	CALL	_Can_resetWritePacket
-;main.c,203 :: 		Can_addIntToWritePacket((int)currentConverted);
-	MOV	[W14+0], W0
-	MOV	[W14+2], W1
+;main.c,203 :: 		Can_addIntToWritePacket((int)tempConverted);
+	MOV	[W14+4], W0
+	MOV	[W14+6], W1
 	CALL	__Float2Longint
 	MOV	W0, W10
 	CALL	_Can_addIntToWritePacket
-;main.c,204 :: 		Can_addIntToWritePacket((int)tempConverted);
-	MOV	[W14+4], W0
-	MOV	[W14+6], W1
+;main.c,204 :: 		Can_addIntToWritePacket((int)currentConverted);
+	MOV	[W14+0], W0
+	MOV	[W14+2], W1
 	CALL	__Float2Longint
 	MOV	W0, W10
 	CALL	_Can_addIntToWritePacket
