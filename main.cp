@@ -1,6 +1,6 @@
-#line 1 "C:/Users/SimoGein/Desktop/git/DAU/DAU/main.c"
-#line 1 "c:/program files/mikroc pro for dspic/include/stdio.h"
-#line 1 "c:/program files/mikroc pro for dspic/include/stdint.h"
+#line 1 "C:/Users/Stefano/Documents/dau 28 06/DAU/main.c"
+#line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for dspic/include/stdio.h"
+#line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for dspic/include/stdint.h"
 
 
 
@@ -42,10 +42,10 @@ typedef unsigned int uintptr_t;
 
 typedef signed long int intmax_t;
 typedef unsigned long int uintmax_t;
-#line 1 "c:/users/simogein/desktop/git/dau/dau/user_function.h"
-#line 1 "c:/program files/mikroc pro for dspic/include/stdio.h"
-#line 1 "c:/program files/mikroc pro for dspic/include/stdint.h"
-#line 65 "c:/users/simogein/desktop/git/dau/dau/user_function.h"
+#line 1 "c:/users/stefano/documents/dau 28 06/dau/user_function.h"
+#line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for dspic/include/stdio.h"
+#line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for dspic/include/stdint.h"
+#line 65 "c:/users/stefano/documents/dau 28 06/dau/user_function.h"
 void tmr5_init(void);
 void can_bus_init(void);
 uint8_t adc_init(void);
@@ -59,9 +59,9 @@ void Toggle_LEDBLUE(void);
 void Set_LEDRED(void);
 void set_LEDBLUE(void);
 void set_LEDGREEN(void);
-#line 1 "c:/users/simogein/desktop/git/dau/dau/id_can.h"
-#line 1 "c:/users/simogein/desktop/git/dau/dau/can.h"
-#line 48 "c:/users/simogein/desktop/git/dau/dau/can.h"
+#line 1 "c:/users/stefano/documents/dau 28 06/dau/id_can.h"
+#line 1 "c:/users/stefano/documents/dau 28 06/dau/can.h"
+#line 48 "c:/users/stefano/documents/dau 28 06/dau/can.h"
 void Can_init(void);
 
 void Can_read(unsigned long int *id, char dataBuffer[], unsigned int *dataLength, unsigned int *inFlags);
@@ -93,7 +93,7 @@ void Can_clearB1Flag(void);
 void Can_clearInterrupt(void);
 
 void Can_initInterrupt(void);
-#line 34 "C:/Users/SimoGein/Desktop/git/DAU/DAU/main.c"
+#line 34 "C:/Users/Stefano/Documents/dau 28 06/DAU/main.c"
 extern uint8_t DAU_ID;
 
 int time_index = 0;
@@ -146,7 +146,9 @@ void TIMER5_INT() iv IVT_ADDR_T5INTERRUPT ics ICS_AUTO {
 
 
  for (Channel_Index_send = 0; Channel_Index_send <  16 ; Channel_Index_send++){
+
  data_out[Channel_Index_send] = FIR_filter(Channel_Index_send, t_send);
+
  }
 
  switch (DAU_ID){
@@ -182,7 +184,7 @@ void TIMER5_INT() iv IVT_ADDR_T5INTERRUPT ics ICS_AUTO {
  Can_resetWritePacket();
  Can_addIntToWritePacket(data_out[ (uint8_t) 2 ]);
  Can_addIntToWritePacket(data_out[ (uint8_t) 0 ]);
- Can_addIntToWritePacket(data_out[ (uint8_t) 4 ]);
+ Can_addIntToWritePacket(data_out[ (uint8_t) 13 ]);
  Can_addIntToWritePacket(data_out[ (uint8_t) 5 ]);
  Can_write( 0x650 );
 
@@ -233,7 +235,7 @@ void TIMER1_INT() iv IVT_ADDR_T1INTERRUPT ics ICS_AUTO {
 
 
  currentConverted = (float)data_out[ (uint8_t) 14 ] *  1.2210012210012210 ;
- currentConverted = (currentConverted/ 100 )/ 0.03 ;
+ currentConverted = (currentConverted/ 100 )/ 0.062 ;
 
  tempConverted = (float)data_out[ (uint8_t) 15 ] *  1.2210012210012210 ;
  tempConverted = (tempConverted -  500 )/ 10 ;
@@ -314,7 +316,7 @@ void main() {
  io_init();
  Clear_buffer();
  dau_set_ID(&DAU_ID);
-
+  LATGbits.LATG14  = 1;
  can_bus_init();
  adc_init();
  tmr4_init();
@@ -323,7 +325,7 @@ void main() {
 
 
  while(1){
-#line 279 "C:/Users/SimoGein/Desktop/git/DAU/DAU/main.c"
+#line 281 "C:/Users/Stefano/Documents/dau 28 06/DAU/main.c"
  }
 
 }

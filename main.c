@@ -83,7 +83,9 @@ void TIMER5_INT() iv IVT_ADDR_T5INTERRUPT ics ICS_AUTO {
 
 
      for (Channel_Index_send = 0; Channel_Index_send < N_CHANNEL; Channel_Index_send++){
-             data_out[Channel_Index_send] = FIR_filter(Channel_Index_send, t_send);            //CHIAMATA FUNZIONE FILTRO
+
+             data_out[Channel_Index_send] = FIR_filter(Channel_Index_send, t_send);
+                         //CHIAMATA FUNZIONE FILTRO
           }
 
       switch (DAU_ID){
@@ -91,25 +93,25 @@ void TIMER5_INT() iv IVT_ADDR_T5INTERRUPT ics ICS_AUTO {
           case DAU_REAR :
 
       Can_resetWritePacket();
-      Can_addIntToWritePacket(data_out[IN_1]);			//lineare rear left 
-      Can_addIntToWritePacket(data_out[LC_1]);			//load cell  rear left
-      Can_addIntToWritePacket(data_out[IN_5_J3]);		//lineare rear right
-      Can_addIntToWritePacket(data_out[LC_2]);			//load cell rear rigth
-      Can_write(DAU_REAR_ID);                         	//0x652
+      Can_addIntToWritePacket(data_out[IN_1]);                        //lineare rear left 
+      Can_addIntToWritePacket(data_out[LC_1]);                        //load cell  rear left
+      Can_addIntToWritePacket(data_out[IN_5_J3]);                //lineare rear right
+      Can_addIntToWritePacket(data_out[LC_2]);                        //load cell rear rigth
+      Can_write(DAU_REAR_ID);                                 //0x652
 
       Can_resetWritePacket();
       Can_addIntToWritePacket(data_out[IR1]);
       Can_addIntToWritePacket(data_out[IR2]);
       Can_addIntToWritePacket(data_out[IR3]);
-      Can_addIntToWritePacket(data_out[IN_2]);			//BREAKE IR RL
-      Can_write(DAU_REAR_IR_RL_ID);                   	//0x656
+      Can_addIntToWritePacket(data_out[IN_2]);                        //BREAKE IR RL
+      Can_write(DAU_REAR_IR_RL_ID);                           //0x656
 
       Can_resetWritePacket();
       Can_addIntToWritePacket(data_out[IR4]);
       Can_addIntToWritePacket(data_out[IR5]);
       Can_addIntToWritePacket(data_out[IR6]);
-      Can_addIntToWritePacket(data_out[IN_6_J4]);		//BREAKE IR RR
-      Can_write(DAU_REAR_IR_RR_ID);                   	//0x657
+      Can_addIntToWritePacket(data_out[IN_6_J4]);                //BREAKE IR RR
+      Can_write(DAU_REAR_IR_RR_ID);                           //0x657
 
 
       break;
@@ -119,7 +121,7 @@ void TIMER5_INT() iv IVT_ADDR_T5INTERRUPT ics ICS_AUTO {
       Can_resetWritePacket();
       Can_addIntToWritePacket(data_out[IN_1]);
       Can_addIntToWritePacket(data_out[LC_1]);
-      Can_addIntToWritePacket(data_out[IN_5_J3]);
+      Can_addIntToWritePacket(data_out[IR6]);
       Can_addIntToWritePacket(data_out[IN_6_J4]);
       Can_write(DAU_FR_ID);                             //0x650
 
@@ -161,54 +163,54 @@ void TIMER5_INT() iv IVT_ADDR_T5INTERRUPT ics ICS_AUTO {
 
 }
 
-void TIMER1_INT() iv IVT_ADDR_T1INTERRUPT ics ICS_AUTO {			//interrupt responsabile dell'invio dei dati di debug sul can
-	
-	float currentConverted, tempConverted = 0;
-	if (TMR1_CONT > 5){	
+void TIMER1_INT() iv IVT_ADDR_T1INTERRUPT ics ICS_AUTO {                        //interrupt responsabile dell'invio dei dati di debug sul can
+        
+        float currentConverted, tempConverted = 0;
+        if (TMR1_CONT > 5){        
 
-		TMR1_CONT = 0;
+                TMR1_CONT = 0;
 
-		/*converto i valori di debug*/
-		currentConverted = (float)data_out[CURRENT_SENSE] * LSB_1000;			//vout in mV
-		currentConverted = (currentConverted/INA_GAIN)/SHUNT_RESISTOR; 			//risultato in mA
+                /*converto i valori di debug*/
+                currentConverted = (float)data_out[CURRENT_SENSE] * LSB_1000;                        //vout in mV
+                currentConverted = (currentConverted/INA_GAIN)/SHUNT_RESISTOR;                         //risultato in mA
 
-		tempConverted = (float)data_out[TEMP_SENSE] * LSB_1000;					//Vout in mV
-		tempConverted = (tempConverted - TEMP_OFFSET)/TEMP_RATE;				//risultato in gradi										
+                tempConverted = (float)data_out[TEMP_SENSE] * LSB_1000;                                        //Vout in mV
+                tempConverted = (tempConverted - TEMP_OFFSET)/TEMP_RATE;                                //risultato in gradi                                                                                
 
-		switch (DAU_ID){
+                switch (DAU_ID){
 
-			/*gli invio su can*/
-			case DAU_REAR :
-			Toggle_LEDRED();
+                        /*gli invio su can*/
+                        case DAU_REAR :
+                        Toggle_LEDRED();
 
-	        Can_resetWritePacket();
-	        Can_addIntToWritePacket((int)tempConverted);
-	        Can_addIntToWritePacket((int)currentConverted);
-	        Can_write(DAU_REAR_DEBUG_ID);
-				break;
+                Can_resetWritePacket();
+                Can_addIntToWritePacket((int)tempConverted);
+                Can_addIntToWritePacket((int)currentConverted);
+                Can_write(DAU_REAR_DEBUG_ID);
+                                break;
 
-			case DAU_FL :
-			Toggle_LEDRED();
-	         
-	        Can_resetWritePacket();
-	        Can_addIntToWritePacket((int)tempConverted);
-	        Can_addIntToWritePacket((int)currentConverted);
-	        Can_write(DAU_FL_DEBUG_ID);           //0x313
-				break;
+                        case DAU_FL :
+                        Toggle_LEDRED();
+                 
+                Can_resetWritePacket();
+                Can_addIntToWritePacket((int)tempConverted);
+                Can_addIntToWritePacket((int)currentConverted);
+                Can_write(DAU_FL_DEBUG_ID);           //0x313
+                                break;
 
-			case DAU_FR :
-			Toggle_LEDRED();
+                        case DAU_FR :
+                        Toggle_LEDRED();
 
-	        Can_resetWritePacket();
-	        Can_addIntToWritePacket((int)tempConverted);
-	        Can_addIntToWritePacket((int)currentConverted);
-	        Can_write(DAU_FR_DEBUG_ID);
-				break;
-		}
+                Can_resetWritePacket();
+                Can_addIntToWritePacket((int)tempConverted);
+                Can_addIntToWritePacket((int)currentConverted);
+                Can_write(DAU_FR_DEBUG_ID);
+                                break;
+                }
 
-	}
-	TMR1_CONT++;
-	IFS0bits.T1IF = 0;
+        }
+        TMR1_CONT++;
+        IFS0bits.T1IF = 0;
 }
 
 void ADC_INT() iv IVT_ADDR_ADCINTERRUPT ics ICS_AUTO {  //non vorrei che le operazioni svolte qui dentro fosero troppe per una interrupt, forse andrebbero delegate a un'altra funzione
@@ -251,7 +253,7 @@ void main() {
   io_init();
   Clear_buffer();
   dau_set_ID(&DAU_ID); 
-
+  LEDGREEN = 1;
   can_bus_init();
   adc_init();
   tmr4_init();

@@ -29,11 +29,11 @@
 #define DAU_REAR 0b10
 
 /*define per la conversione dei dati debug*/
-#define INA_GAIN		100
-#define SHUNT_RESISTOR	0.03 									/*ohm			*/
-#define TEMP_OFFSET		500										/*mV			*/
-#define TEMP_RATE		10										/*mV			*/
-#define LSB_1000		1.2210012210012210						/*(5V / (2^12 - 1) )*1000*/
+#define INA_GAIN                100
+#define SHUNT_RESISTOR        0.062                                                                         /*ohm                        */
+#define TEMP_OFFSET                500                                                                                /*mV                        */
+#define TEMP_RATE                10                                                                                /*mV                        */
+#define LSB_1000                1.2210012210012210                                                /*(5V / (2^12 - 1) )*1000*/
 
 
 

@@ -128,7 +128,7 @@ L_TIMER5_INT5:
 	GOTO	L_TIMER5_INT6
 L__TIMER5_INT37:
 ; t_send end address is: 4 (W2)
-;main.c,86 :: 		data_out[Channel_Index_send] = FIR_filter(Channel_Index_send, t_send);            //CHIAMATA FUNZIONE FILTRO
+;main.c,87 :: 		data_out[Channel_Index_send] = FIR_filter(Channel_Index_send, t_send);
 ; t_send start address is: 4 (W2)
 	SL	W3, #1, W1
 	MOV	#lo_addr(_data_out), W0
@@ -143,152 +143,152 @@ L__TIMER5_INT37:
 	MOV	W0, [W1]
 ;main.c,85 :: 		for (Channel_Index_send = 0; Channel_Index_send < N_CHANNEL; Channel_Index_send++){
 	INC	W3
-;main.c,87 :: 		}
+;main.c,89 :: 		}
 ; t_send end address is: 4 (W2)
 ; Channel_Index_send end address is: 6 (W3)
 	GOTO	L_TIMER5_INT5
 L_TIMER5_INT6:
-;main.c,89 :: 		switch (DAU_ID){
+;main.c,91 :: 		switch (DAU_ID){
 	GOTO	L_TIMER5_INT8
-;main.c,91 :: 		case DAU_REAR :
+;main.c,93 :: 		case DAU_REAR :
 L_TIMER5_INT10:
-;main.c,93 :: 		Can_resetWritePacket();
+;main.c,95 :: 		Can_resetWritePacket();
 	CALL	_Can_resetWritePacket
-;main.c,94 :: 		Can_addIntToWritePacket(data_out[IN_1]);			//lineare rear left
+;main.c,96 :: 		Can_addIntToWritePacket(data_out[IN_1]);                        //lineare rear left
 	MOV	_data_out+4, W10
 	CALL	_Can_addIntToWritePacket
-;main.c,95 :: 		Can_addIntToWritePacket(data_out[LC_1]);			//load cell  rear left
+;main.c,97 :: 		Can_addIntToWritePacket(data_out[LC_1]);                        //load cell  rear left
 	MOV	_data_out, W10
 	CALL	_Can_addIntToWritePacket
-;main.c,96 :: 		Can_addIntToWritePacket(data_out[IN_5_J3]);		//lineare rear right
+;main.c,98 :: 		Can_addIntToWritePacket(data_out[IN_5_J3]);                //lineare rear right
 	MOV	_data_out+8, W10
 	CALL	_Can_addIntToWritePacket
-;main.c,97 :: 		Can_addIntToWritePacket(data_out[LC_2]);			//load cell rear rigth
+;main.c,99 :: 		Can_addIntToWritePacket(data_out[LC_2]);                        //load cell rear rigth
 	MOV	_data_out+2, W10
 	CALL	_Can_addIntToWritePacket
-;main.c,98 :: 		Can_write(DAU_REAR_ID);                         	//0x652
+;main.c,100 :: 		Can_write(DAU_REAR_ID);                                 //0x652
 	MOV	#1618, W10
 	MOV	#0, W11
 	CALL	_Can_write
-;main.c,100 :: 		Can_resetWritePacket();
+;main.c,102 :: 		Can_resetWritePacket();
 	CALL	_Can_resetWritePacket
-;main.c,101 :: 		Can_addIntToWritePacket(data_out[IR1]);
+;main.c,103 :: 		Can_addIntToWritePacket(data_out[IR1]);
 	MOV	_data_out+16, W10
 	CALL	_Can_addIntToWritePacket
-;main.c,102 :: 		Can_addIntToWritePacket(data_out[IR2]);
+;main.c,104 :: 		Can_addIntToWritePacket(data_out[IR2]);
 	MOV	_data_out+18, W10
 	CALL	_Can_addIntToWritePacket
-;main.c,103 :: 		Can_addIntToWritePacket(data_out[IR3]);
+;main.c,105 :: 		Can_addIntToWritePacket(data_out[IR3]);
 	MOV	_data_out+20, W10
 	CALL	_Can_addIntToWritePacket
-;main.c,104 :: 		Can_addIntToWritePacket(data_out[IN_2]);			//BREAKE IR RL
+;main.c,106 :: 		Can_addIntToWritePacket(data_out[IN_2]);                        //BREAKE IR RL
 	MOV	_data_out+6, W10
 	CALL	_Can_addIntToWritePacket
-;main.c,105 :: 		Can_write(DAU_REAR_IR_RL_ID);                   	//0x656
+;main.c,107 :: 		Can_write(DAU_REAR_IR_RL_ID);                           //0x656
 	MOV	#1622, W10
 	MOV	#0, W11
 	CALL	_Can_write
-;main.c,107 :: 		Can_resetWritePacket();
+;main.c,109 :: 		Can_resetWritePacket();
 	CALL	_Can_resetWritePacket
-;main.c,108 :: 		Can_addIntToWritePacket(data_out[IR4]);
+;main.c,110 :: 		Can_addIntToWritePacket(data_out[IR4]);
 	MOV	_data_out+22, W10
 	CALL	_Can_addIntToWritePacket
-;main.c,109 :: 		Can_addIntToWritePacket(data_out[IR5]);
+;main.c,111 :: 		Can_addIntToWritePacket(data_out[IR5]);
 	MOV	_data_out+24, W10
 	CALL	_Can_addIntToWritePacket
-;main.c,110 :: 		Can_addIntToWritePacket(data_out[IR6]);
+;main.c,112 :: 		Can_addIntToWritePacket(data_out[IR6]);
 	MOV	_data_out+26, W10
 	CALL	_Can_addIntToWritePacket
-;main.c,111 :: 		Can_addIntToWritePacket(data_out[IN_6_J4]);		//BREAKE IR RR
+;main.c,113 :: 		Can_addIntToWritePacket(data_out[IN_6_J4]);                //BREAKE IR RR
 	MOV	_data_out+10, W10
 	CALL	_Can_addIntToWritePacket
-;main.c,112 :: 		Can_write(DAU_REAR_IR_RR_ID);                   	//0x657
+;main.c,114 :: 		Can_write(DAU_REAR_IR_RR_ID);                           //0x657
 	MOV	#1623, W10
 	MOV	#0, W11
 	CALL	_Can_write
-;main.c,115 :: 		break;
+;main.c,117 :: 		break;
 	GOTO	L_TIMER5_INT9
-;main.c,117 :: 		case DAU_FR :
+;main.c,119 :: 		case DAU_FR :
 L_TIMER5_INT11:
-;main.c,119 :: 		Can_resetWritePacket();
+;main.c,121 :: 		Can_resetWritePacket();
 	CALL	_Can_resetWritePacket
-;main.c,120 :: 		Can_addIntToWritePacket(data_out[IN_1]);
+;main.c,122 :: 		Can_addIntToWritePacket(data_out[IN_1]);
 	MOV	_data_out+4, W10
 	CALL	_Can_addIntToWritePacket
-;main.c,121 :: 		Can_addIntToWritePacket(data_out[LC_1]);
+;main.c,123 :: 		Can_addIntToWritePacket(data_out[LC_1]);
 	MOV	_data_out, W10
 	CALL	_Can_addIntToWritePacket
-;main.c,122 :: 		Can_addIntToWritePacket(data_out[IN_5_J3]);
-	MOV	_data_out+8, W10
+;main.c,124 :: 		Can_addIntToWritePacket(data_out[IR6]);
+	MOV	_data_out+26, W10
 	CALL	_Can_addIntToWritePacket
-;main.c,123 :: 		Can_addIntToWritePacket(data_out[IN_6_J4]);
+;main.c,125 :: 		Can_addIntToWritePacket(data_out[IN_6_J4]);
 	MOV	_data_out+10, W10
 	CALL	_Can_addIntToWritePacket
-;main.c,124 :: 		Can_write(DAU_FR_ID);                             //0x650
+;main.c,126 :: 		Can_write(DAU_FR_ID);                             //0x650
 	MOV	#1616, W10
 	MOV	#0, W11
 	CALL	_Can_write
-;main.c,126 :: 		Can_resetWritePacket();
+;main.c,128 :: 		Can_resetWritePacket();
 	CALL	_Can_resetWritePacket
-;main.c,127 :: 		Can_addIntToWritePacket(data_out[IR1]);
+;main.c,129 :: 		Can_addIntToWritePacket(data_out[IR1]);
 	MOV	_data_out+16, W10
 	CALL	_Can_addIntToWritePacket
-;main.c,128 :: 		Can_addIntToWritePacket(data_out[IR2]);
+;main.c,130 :: 		Can_addIntToWritePacket(data_out[IR2]);
 	MOV	_data_out+18, W10
 	CALL	_Can_addIntToWritePacket
-;main.c,129 :: 		Can_addIntToWritePacket(data_out[IR3]);
+;main.c,131 :: 		Can_addIntToWritePacket(data_out[IR3]);
 	MOV	_data_out+20, W10
 	CALL	_Can_addIntToWritePacket
-;main.c,130 :: 		Can_addIntToWritePacket(data_out[IN_2]);
+;main.c,132 :: 		Can_addIntToWritePacket(data_out[IN_2]);
 	MOV	_data_out+6, W10
 	CALL	_Can_addIntToWritePacket
-;main.c,131 :: 		Can_write(DAU_FR_IR_ID);                          //0x655
+;main.c,133 :: 		Can_write(DAU_FR_IR_ID);                          //0x655
 	MOV	#1621, W10
 	MOV	#0, W11
 	CALL	_Can_write
-;main.c,133 :: 		break;
+;main.c,135 :: 		break;
 	GOTO	L_TIMER5_INT9
-;main.c,135 :: 		case DAU_FL :
+;main.c,137 :: 		case DAU_FL :
 L_TIMER5_INT12:
-;main.c,137 :: 		Can_resetWritePacket();
+;main.c,139 :: 		Can_resetWritePacket();
 	CALL	_Can_resetWritePacket
-;main.c,138 :: 		Can_addIntToWritePacket(data_out[IN_1]);
+;main.c,140 :: 		Can_addIntToWritePacket(data_out[IN_1]);
 	MOV	_data_out+4, W10
 	CALL	_Can_addIntToWritePacket
-;main.c,139 :: 		Can_addIntToWritePacket(data_out[LC_1]);
+;main.c,141 :: 		Can_addIntToWritePacket(data_out[LC_1]);
 	MOV	_data_out, W10
 	CALL	_Can_addIntToWritePacket
-;main.c,140 :: 		Can_addIntToWritePacket(data_out[IN_5_J3]);
+;main.c,142 :: 		Can_addIntToWritePacket(data_out[IN_5_J3]);
 	MOV	_data_out+8, W10
 	CALL	_Can_addIntToWritePacket
-;main.c,141 :: 		Can_addIntToWritePacket(data_out[IN_6_J4]);    //SE SENSORE STEER MONTATO STORTO VANNO CORRETTI I VALORI
+;main.c,143 :: 		Can_addIntToWritePacket(data_out[IN_6_J4]);    //SE SENSORE STEER MONTATO STORTO VANNO CORRETTI I VALORI
 	MOV	_data_out+10, W10
 	CALL	_Can_addIntToWritePacket
-;main.c,142 :: 		Can_write(DAU_FL_ID);                    //0x651
+;main.c,144 :: 		Can_write(DAU_FL_ID);                    //0x651
 	MOV	#1617, W10
 	MOV	#0, W11
 	CALL	_Can_write
-;main.c,144 :: 		Can_resetWritePacket();
+;main.c,146 :: 		Can_resetWritePacket();
 	CALL	_Can_resetWritePacket
-;main.c,145 :: 		Can_addIntToWritePacket(data_out[IR1]);
+;main.c,147 :: 		Can_addIntToWritePacket(data_out[IR1]);
 	MOV	_data_out+16, W10
 	CALL	_Can_addIntToWritePacket
-;main.c,146 :: 		Can_addIntToWritePacket(data_out[IR2]);
+;main.c,148 :: 		Can_addIntToWritePacket(data_out[IR2]);
 	MOV	_data_out+18, W10
 	CALL	_Can_addIntToWritePacket
-;main.c,147 :: 		Can_addIntToWritePacket(data_out[IR3]);
+;main.c,149 :: 		Can_addIntToWritePacket(data_out[IR3]);
 	MOV	_data_out+20, W10
 	CALL	_Can_addIntToWritePacket
-;main.c,148 :: 		Can_addIntToWritePacket(data_out[IN_2]);   //SAREBBE LA TEMPERATURA FRENO. E OK QUI?
+;main.c,150 :: 		Can_addIntToWritePacket(data_out[IN_2]);   //SAREBBE LA TEMPERATURA FRENO. E OK QUI?
 	MOV	_data_out+6, W10
 	CALL	_Can_addIntToWritePacket
-;main.c,149 :: 		Can_write(DAU_FL_IR_ID);                 //0x654
+;main.c,151 :: 		Can_write(DAU_FL_IR_ID);                 //0x654
 	MOV	#1620, W10
 	MOV	#0, W11
 	CALL	_Can_write
-;main.c,151 :: 		break;
+;main.c,153 :: 		break;
 	GOTO	L_TIMER5_INT9
-;main.c,153 :: 		}
+;main.c,155 :: 		}
 L_TIMER5_INT8:
 	MOV	#lo_addr(_DAU_ID), W0
 	MOV.B	[W0], W0
@@ -309,16 +309,16 @@ L__TIMER5_INT39:
 	GOTO	L_TIMER5_INT12
 L__TIMER5_INT40:
 L_TIMER5_INT9:
-;main.c,157 :: 		TMR5_CONT++;
+;main.c,159 :: 		TMR5_CONT++;
 	MOV	#1, W1
 	MOV	#lo_addr(_TMR5_CONT), W0
 	ADD	W1, [W0], [W0]
-;main.c,159 :: 		ADC_CONT = 0;                                // RESETTA IL CONTEGGIO DI SAMPLE ADC
+;main.c,161 :: 		ADC_CONT = 0;                                // RESETTA IL CONTEGGIO DI SAMPLE ADC
 	CLR	W0
 	MOV	W0, _ADC_CONT
-;main.c,160 :: 		IFS1bits.T5IF = 0;
+;main.c,162 :: 		IFS1bits.T5IF = 0;
 	BCLR	IFS1bits, #6
-;main.c,162 :: 		}
+;main.c,164 :: 		}
 L_end_TIMER5_INT:
 	POP	W11
 	POP	W10
@@ -341,20 +341,20 @@ _TIMER1_INT:
 	REPEAT	#12
 	PUSH	[W0++]
 
-;main.c,164 :: 		void TIMER1_INT() iv IVT_ADDR_T1INTERRUPT ics ICS_AUTO {			//interrupt responsabile dell'invio dei dati di debug sul can
-;main.c,166 :: 		float currentConverted, tempConverted = 0;
+;main.c,166 :: 		void TIMER1_INT() iv IVT_ADDR_T1INTERRUPT ics ICS_AUTO {                        //interrupt responsabile dell'invio dei dati di debug sul can
+;main.c,168 :: 		float currentConverted, tempConverted = 0;
 	PUSH	W10
 	PUSH	W11
-;main.c,167 :: 		if (TMR1_CONT > 5){
+;main.c,169 :: 		if (TMR1_CONT > 5){
 	MOV	_TMR1_CONT, W0
 	CP	W0, #5
 	BRA GT	L__TIMER1_INT42
 	GOTO	L_TIMER1_INT13
 L__TIMER1_INT42:
-;main.c,169 :: 		TMR1_CONT = 0;
+;main.c,171 :: 		TMR1_CONT = 0;
 	CLR	W0
 	MOV	W0, _TMR1_CONT
-;main.c,172 :: 		currentConverted = (float)data_out[CURRENT_SENSE] * LSB_1000;			//vout in mV
+;main.c,174 :: 		currentConverted = (float)data_out[CURRENT_SENSE] * LSB_1000;                        //vout in mV
 	MOV	_data_out+28, W0
 	ASR	W0, #15, W1
 	SETM	W2
@@ -362,16 +362,16 @@ L__TIMER1_INT42:
 	MOV	#18885, W2
 	MOV	#16284, W3
 	CALL	__Mul_FP
-;main.c,173 :: 		currentConverted = (currentConverted/INA_GAIN)/SHUNT_RESISTOR; 			//risultato in mA
+;main.c,175 :: 		currentConverted = (currentConverted/INA_GAIN)/SHUNT_RESISTOR;                         //risultato in mA
 	MOV	#0, W2
 	MOV	#17096, W3
 	CALL	__Div_FP
-	MOV	#49807, W2
-	MOV	#15605, W3
+	MOV	#62390, W2
+	MOV	#15741, W3
 	CALL	__Div_FP
 	MOV	W0, [W14+0]
 	MOV	W1, [W14+2]
-;main.c,175 :: 		tempConverted = (float)data_out[TEMP_SENSE] * LSB_1000;					//Vout in mV
+;main.c,177 :: 		tempConverted = (float)data_out[TEMP_SENSE] * LSB_1000;                                        //Vout in mV
 	MOV	_data_out+30, W0
 	ASR	W0, #15, W1
 	SETM	W2
@@ -379,7 +379,7 @@ L__TIMER1_INT42:
 	MOV	#18885, W2
 	MOV	#16284, W3
 	CALL	__Mul_FP
-;main.c,176 :: 		tempConverted = (tempConverted - TEMP_OFFSET)/TEMP_RATE;				//risultato in gradi
+;main.c,178 :: 		tempConverted = (tempConverted - TEMP_OFFSET)/TEMP_RATE;                                //risultato in gradi
 	MOV	#0, W2
 	MOV	#17402, W3
 	CALL	__Sub_FP
@@ -388,81 +388,81 @@ L__TIMER1_INT42:
 	CALL	__Div_FP
 	MOV	W0, [W14+4]
 	MOV	W1, [W14+6]
-;main.c,178 :: 		switch (DAU_ID){
+;main.c,180 :: 		switch (DAU_ID){
 	GOTO	L_TIMER1_INT14
-;main.c,181 :: 		case DAU_REAR :
+;main.c,183 :: 		case DAU_REAR :
 L_TIMER1_INT16:
-;main.c,182 :: 		Toggle_LEDRED();
+;main.c,184 :: 		Toggle_LEDRED();
 	CALL	_Toggle_LEDRED
-;main.c,184 :: 		Can_resetWritePacket();
+;main.c,186 :: 		Can_resetWritePacket();
 	CALL	_Can_resetWritePacket
-;main.c,185 :: 		Can_addIntToWritePacket((int)tempConverted);
+;main.c,187 :: 		Can_addIntToWritePacket((int)tempConverted);
 	MOV	[W14+4], W0
 	MOV	[W14+6], W1
 	CALL	__Float2Longint
 	MOV	W0, W10
 	CALL	_Can_addIntToWritePacket
-;main.c,186 :: 		Can_addIntToWritePacket((int)currentConverted);
+;main.c,188 :: 		Can_addIntToWritePacket((int)currentConverted);
 	MOV	[W14+0], W0
 	MOV	[W14+2], W1
 	CALL	__Float2Longint
 	MOV	W0, W10
 	CALL	_Can_addIntToWritePacket
-;main.c,187 :: 		Can_write(DAU_REAR_DEBUG_ID);
+;main.c,189 :: 		Can_write(DAU_REAR_DEBUG_ID);
 	MOV	#788, W10
 	MOV	#0, W11
 	CALL	_Can_write
-;main.c,188 :: 		break;
+;main.c,190 :: 		break;
 	GOTO	L_TIMER1_INT15
-;main.c,190 :: 		case DAU_FL :
+;main.c,192 :: 		case DAU_FL :
 L_TIMER1_INT17:
-;main.c,191 :: 		Toggle_LEDRED();
+;main.c,193 :: 		Toggle_LEDRED();
 	CALL	_Toggle_LEDRED
-;main.c,193 :: 		Can_resetWritePacket();
+;main.c,195 :: 		Can_resetWritePacket();
 	CALL	_Can_resetWritePacket
-;main.c,194 :: 		Can_addIntToWritePacket((int)tempConverted);
+;main.c,196 :: 		Can_addIntToWritePacket((int)tempConverted);
 	MOV	[W14+4], W0
 	MOV	[W14+6], W1
 	CALL	__Float2Longint
 	MOV	W0, W10
 	CALL	_Can_addIntToWritePacket
-;main.c,195 :: 		Can_addIntToWritePacket((int)currentConverted);
+;main.c,197 :: 		Can_addIntToWritePacket((int)currentConverted);
 	MOV	[W14+0], W0
 	MOV	[W14+2], W1
 	CALL	__Float2Longint
 	MOV	W0, W10
 	CALL	_Can_addIntToWritePacket
-;main.c,196 :: 		Can_write(DAU_FL_DEBUG_ID);           //0x313
+;main.c,198 :: 		Can_write(DAU_FL_DEBUG_ID);           //0x313
 	MOV	#787, W10
 	MOV	#0, W11
 	CALL	_Can_write
-;main.c,197 :: 		break;
+;main.c,199 :: 		break;
 	GOTO	L_TIMER1_INT15
-;main.c,199 :: 		case DAU_FR :
+;main.c,201 :: 		case DAU_FR :
 L_TIMER1_INT18:
-;main.c,200 :: 		Toggle_LEDRED();
+;main.c,202 :: 		Toggle_LEDRED();
 	CALL	_Toggle_LEDRED
-;main.c,202 :: 		Can_resetWritePacket();
+;main.c,204 :: 		Can_resetWritePacket();
 	CALL	_Can_resetWritePacket
-;main.c,203 :: 		Can_addIntToWritePacket((int)tempConverted);
+;main.c,205 :: 		Can_addIntToWritePacket((int)tempConverted);
 	MOV	[W14+4], W0
 	MOV	[W14+6], W1
 	CALL	__Float2Longint
 	MOV	W0, W10
 	CALL	_Can_addIntToWritePacket
-;main.c,204 :: 		Can_addIntToWritePacket((int)currentConverted);
+;main.c,206 :: 		Can_addIntToWritePacket((int)currentConverted);
 	MOV	[W14+0], W0
 	MOV	[W14+2], W1
 	CALL	__Float2Longint
 	MOV	W0, W10
 	CALL	_Can_addIntToWritePacket
-;main.c,205 :: 		Can_write(DAU_FR_DEBUG_ID);
+;main.c,207 :: 		Can_write(DAU_FR_DEBUG_ID);
 	MOV	#786, W10
 	MOV	#0, W11
 	CALL	_Can_write
-;main.c,206 :: 		break;
+;main.c,208 :: 		break;
 	GOTO	L_TIMER1_INT15
-;main.c,207 :: 		}
+;main.c,209 :: 		}
 L_TIMER1_INT14:
 	MOV	#lo_addr(_DAU_ID), W0
 	MOV.B	[W0], W0
@@ -483,15 +483,15 @@ L__TIMER1_INT44:
 	GOTO	L_TIMER1_INT18
 L__TIMER1_INT45:
 L_TIMER1_INT15:
-;main.c,209 :: 		}
+;main.c,211 :: 		}
 L_TIMER1_INT13:
-;main.c,210 :: 		TMR1_CONT++;
+;main.c,212 :: 		TMR1_CONT++;
 	MOV	#1, W1
 	MOV	#lo_addr(_TMR1_CONT), W0
 	ADD	W1, [W0], [W0]
-;main.c,211 :: 		IFS0bits.T1IF = 0;
+;main.c,213 :: 		IFS0bits.T1IF = 0;
 	BCLR	IFS0bits, #3
-;main.c,212 :: 		}
+;main.c,214 :: 		}
 L_end_TIMER1_INT:
 	POP	W11
 	POP	W10
@@ -513,9 +513,9 @@ _ADC_INT:
 	REPEAT	#12
 	PUSH	[W0++]
 
-;main.c,214 :: 		void ADC_INT() iv IVT_ADDR_ADCINTERRUPT ics ICS_AUTO {  //non vorrei che le operazioni svolte qui dentro fosero troppe per una interrupt, forse andrebbero delegate a un'altra funzione
-;main.c,215 :: 		int Channel_Index = 0;
-;main.c,218 :: 		for (Channel_Index = 0; Channel_Index < N_CHANNEL; Channel_Index ++){     //SALVA TUTTE LE LETTURE DEI CANALI AL NUOVO TIME_INDEX
+;main.c,216 :: 		void ADC_INT() iv IVT_ADDR_ADCINTERRUPT ics ICS_AUTO {  //non vorrei che le operazioni svolte qui dentro fosero troppe per una interrupt, forse andrebbero delegate a un'altra funzione
+;main.c,217 :: 		int Channel_Index = 0;
+;main.c,220 :: 		for (Channel_Index = 0; Channel_Index < N_CHANNEL; Channel_Index ++){     //SALVA TUTTE LE LETTURE DEI CANALI AL NUOVO TIME_INDEX
 ; Channel_Index start address is: 8 (W4)
 	CLR	W4
 ; Channel_Index end address is: 8 (W4)
@@ -525,12 +525,12 @@ L_ADC_INT19:
 	BRA LT	L__ADC_INT47
 	GOTO	L_ADC_INT20
 L__ADC_INT47:
-;main.c,219 :: 		buffer_adc = (&ADCBUF0 + Channel_Index);
+;main.c,221 :: 		buffer_adc = (&ADCBUF0 + Channel_Index);
 	SL	W4, #1, W2
 	MOV	#lo_addr(ADCBUF0), W1
 	MOV	#lo_addr(_buffer_adc), W0
 	ADD	W1, W2, [W0]
-;main.c,220 :: 		data_buffer[Channel_Index][time_index] = *buffer_adc;
+;main.c,222 :: 		data_buffer[Channel_Index][time_index] = *buffer_adc;
 	MOV	#204, W0
 	MUL.UU	W0, W4, W2
 	MOV	#lo_addr(_data_buffer), W0
@@ -542,13 +542,13 @@ L__ADC_INT47:
 	MOV	[W0], W0
 	ASR	W0, #15, W1
 	MOV.D	W0, [W2]
-;main.c,218 :: 		for (Channel_Index = 0; Channel_Index < N_CHANNEL; Channel_Index ++){     //SALVA TUTTE LE LETTURE DEI CANALI AL NUOVO TIME_INDEX
+;main.c,220 :: 		for (Channel_Index = 0; Channel_Index < N_CHANNEL; Channel_Index ++){     //SALVA TUTTE LE LETTURE DEI CANALI AL NUOVO TIME_INDEX
 	INC	W4
-;main.c,221 :: 		}
+;main.c,223 :: 		}
 ; Channel_Index end address is: 8 (W4)
 	GOTO	L_ADC_INT19
 L_ADC_INT20:
-;main.c,223 :: 		if (time_index == FILTER_ORDER) time_index = 0;
+;main.c,225 :: 		if (time_index == FILTER_ORDER) time_index = 0;
 	MOV	#50, W1
 	MOV	#lo_addr(_time_index), W0
 	CP	W1, [W0]
@@ -559,18 +559,18 @@ L__ADC_INT48:
 	MOV	W0, _time_index
 	GOTO	L_ADC_INT23
 L_ADC_INT22:
-;main.c,224 :: 		else time_index++;
+;main.c,226 :: 		else time_index++;
 	MOV	#1, W1
 	MOV	#lo_addr(_time_index), W0
 	ADD	W1, [W0], [W0]
 L_ADC_INT23:
-;main.c,226 :: 		ADC_CONT++;
+;main.c,228 :: 		ADC_CONT++;
 	MOV	#1, W1
 	MOV	#lo_addr(_ADC_CONT), W0
 	ADD	W1, [W0], [W0]
-;main.c,228 :: 		IFS0bits.ADIF     = 0b0;        //clear interrupt flag
+;main.c,230 :: 		IFS0bits.ADIF     = 0b0;        //clear interrupt flag
 	BCLR	IFS0bits, #11
-;main.c,229 :: 		}
+;main.c,231 :: 		}
 L_end_ADC_INT:
 	MOV	#26, W0
 	REPEAT	#12
@@ -589,12 +589,12 @@ _TIMER4_INT:
 	REPEAT	#12
 	PUSH	[W0++]
 
-;main.c,231 :: 		void TIMER4_INT() iv IVT_ADDR_T4INTERRUPT ics ICS_AUTO {
-;main.c,233 :: 		ADCON1bits.ADON = 1;
+;main.c,233 :: 		void TIMER4_INT() iv IVT_ADDR_T4INTERRUPT ics ICS_AUTO {
+;main.c,235 :: 		ADCON1bits.ADON = 1;
 	BSET	ADCON1bits, #15
-;main.c,234 :: 		IFS1bits.T4IF = 0;
+;main.c,236 :: 		IFS1bits.T4IF = 0;
 	BCLR	IFS1bits, #5
-;main.c,236 :: 		}
+;main.c,238 :: 		}
 L_end_TIMER4_INT:
 	MOV	#26, W0
 	REPEAT	#12
@@ -607,9 +607,9 @@ L_end_TIMER4_INT:
 
 _Clear_buffer:
 
-;main.c,239 :: 		void Clear_buffer(){
-;main.c,240 :: 		int Ch_Index, Buffer_Index = 0;
-;main.c,241 :: 		for (Ch_Index = 0; Ch_Index < N_CHANNEL; Ch_Index++){
+;main.c,241 :: 		void Clear_buffer(){
+;main.c,242 :: 		int Ch_Index, Buffer_Index = 0;
+;main.c,243 :: 		for (Ch_Index = 0; Ch_Index < N_CHANNEL; Ch_Index++){
 ; Ch_Index start address is: 8 (W4)
 	CLR	W4
 ; Ch_Index end address is: 8 (W4)
@@ -619,7 +619,7 @@ L_Clear_buffer24:
 	BRA LT	L__Clear_buffer51
 	GOTO	L_Clear_buffer25
 L__Clear_buffer51:
-;main.c,242 :: 		for(Buffer_Index = 0; Buffer_Index < FILTER_ORDER+1; Buffer_Index++){
+;main.c,244 :: 		for(Buffer_Index = 0; Buffer_Index < FILTER_ORDER+1; Buffer_Index++){
 ; Buffer_Index start address is: 10 (W5)
 	CLR	W5
 ; Buffer_Index end address is: 10 (W5)
@@ -632,7 +632,7 @@ L_Clear_buffer27:
 	BRA LT	L__Clear_buffer52
 	GOTO	L_Clear_buffer28
 L__Clear_buffer52:
-;main.c,243 :: 		data_buffer[Ch_Index][Buffer_Index] = 0;
+;main.c,245 :: 		data_buffer[Ch_Index][Buffer_Index] = 0;
 	MOV	#204, W0
 	MUL.UU	W0, W4, W2
 	MOV	#lo_addr(_data_buffer), W0
@@ -642,25 +642,25 @@ L__Clear_buffer52:
 	CLR	W0
 	CLR	W1
 	MOV.D	W0, [W2]
-;main.c,242 :: 		for(Buffer_Index = 0; Buffer_Index < FILTER_ORDER+1; Buffer_Index++){
+;main.c,244 :: 		for(Buffer_Index = 0; Buffer_Index < FILTER_ORDER+1; Buffer_Index++){
 	INC	W5
-;main.c,244 :: 		}
+;main.c,246 :: 		}
 ; Buffer_Index end address is: 10 (W5)
 	GOTO	L_Clear_buffer27
 L_Clear_buffer28:
-;main.c,245 :: 		data_out[Ch_Index]=0;                               //INIZIALIZZA ANCHE DATA OUT
+;main.c,247 :: 		data_out[Ch_Index]=0;                               //INIZIALIZZA ANCHE DATA OUT
 	SL	W4, #1, W1
 	MOV	#lo_addr(_data_out), W0
 	ADD	W0, W1, W1
 	CLR	W0
 	MOV	W0, [W1]
-;main.c,241 :: 		for (Ch_Index = 0; Ch_Index < N_CHANNEL; Ch_Index++){
+;main.c,243 :: 		for (Ch_Index = 0; Ch_Index < N_CHANNEL; Ch_Index++){
 	INC	W4
-;main.c,246 :: 		}
+;main.c,248 :: 		}
 ; Ch_Index end address is: 8 (W4)
 	GOTO	L_Clear_buffer24
 L_Clear_buffer25:
-;main.c,247 :: 		}
+;main.c,249 :: 		}
 L_end_Clear_buffer:
 	RETURN
 ; end of _Clear_buffer
@@ -674,30 +674,32 @@ _main:
 	MOV	#4, W0
 	IOR	68
 
-;main.c,249 :: 		void main() {
-;main.c,251 :: 		io_init();
+;main.c,251 :: 		void main() {
+;main.c,253 :: 		io_init();
 	PUSH	W10
 	CALL	_io_init
-;main.c,252 :: 		Clear_buffer();
+;main.c,254 :: 		Clear_buffer();
 	CALL	_Clear_buffer
-;main.c,253 :: 		dau_set_ID(&DAU_ID);
+;main.c,255 :: 		dau_set_ID(&DAU_ID);
 	MOV	#lo_addr(_DAU_ID), W10
 	CALL	_dau_set_ID
-;main.c,255 :: 		can_bus_init();
+;main.c,256 :: 		LEDGREEN = 1;
+	BSET	LATGbits, #14
+;main.c,257 :: 		can_bus_init();
 	CALL	_can_bus_init
-;main.c,256 :: 		adc_init();
+;main.c,258 :: 		adc_init();
 	CALL	_adc_init
-;main.c,257 :: 		tmr4_init();
+;main.c,259 :: 		tmr4_init();
 	CALL	_tmr4_init
-;main.c,258 :: 		tmr5_init();
+;main.c,260 :: 		tmr5_init();
 	CALL	_tmr5_init
-;main.c,259 :: 		tmr1_init();
+;main.c,261 :: 		tmr1_init();
 	CALL	_tmr1_init
-;main.c,262 :: 		while(1){
+;main.c,264 :: 		while(1){
 L_main30:
-;main.c,279 :: 		}
-	GOTO	L_main30
 ;main.c,281 :: 		}
+	GOTO	L_main30
+;main.c,283 :: 		}
 L_end_main:
 	POP	W10
 L__main_end_loop:
