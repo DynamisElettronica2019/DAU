@@ -30,10 +30,10 @@ void Can_init() {
      Can_Init_flags = _CAN_CONFIG_STD_MSG &             // standard identifier 11 bit
                       _CAN_CONFIG_DBL_BUFFER_ON &       // double buffer mode
                       _CAN_CONFIG_MATCH_MSG_TYPE &
-                      _CAN_CONFIG_LINE_FILTER_ON &      // wake up by line
-                      _CAN_CONFIG_SAMPLE_THRICE &       // for robustness
+                      _CAN_CONFIG_LINE_FILTER_OFF &      // wake up by line
+                      _CAN_CONFIG_SAMPLE_ONCE &       // for robustness
                       _CAN_CONFIG_PHSEG2_PRG_ON;        // these last two are linked to sync
-     CAN1Initialize(2,4,3,4,2,Can_Init_flags);          // SJW,BRP,PHSEG1,PHSEG2,PROPSEG
+     CAN1Initialize(2,2,6,5,8,Can_Init_flags);          // SJW,BRP,PHSEG1,PHSEG2,PROPSEG
      CAN1SetOperationMode(_CAN_MODE_CONFIG,0xFF);
 
      CAN1SetMask(_CAN_MASK_B1, AUX_MASK, _CAN_CONFIG_MATCH_MSG_TYPE & _CAN_CONFIG_STD_MSG);

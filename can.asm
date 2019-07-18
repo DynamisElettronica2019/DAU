@@ -7,14 +7,14 @@ _Can_init:
 	PUSH	W11
 	PUSH	W12
 	PUSH	W13
-;can.c,36 :: 		CAN1Initialize(2,4,3,4,2,Can_Init_flags);          // SJW,BRP,PHSEG1,PHSEG2,PROPSEG
-	MOV	#4, W13
-	MOV	#3, W12
-	MOV	#4, W11
+;can.c,36 :: 		CAN1Initialize(2,2,6,5,8,Can_Init_flags);          // SJW,BRP,PHSEG1,PHSEG2,PROPSEG
+	MOV	#5, W13
+	MOV	#6, W12
+	MOV	#2, W11
 	MOV	#2, W10
-	MOV	#251, W0
+	MOV	#253, W0
 	PUSH	W0
-	MOV	#2, W0
+	MOV	#8, W0
 	PUSH	W0
 	CALL	_CAN1Initialize
 	SUB	#4, W15

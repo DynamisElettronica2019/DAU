@@ -1,6 +1,6 @@
-#line 1 "C:/Users/Stefano/Documents/dau 28 06/DAU/can.c"
-#line 1 "c:/users/stefano/documents/dau 28 06/dau/can.h"
-#line 48 "c:/users/stefano/documents/dau 28 06/dau/can.h"
+#line 1 "C:/Users/sofia/Desktop/GIT REPO/DAU/can.c"
+#line 1 "c:/users/sofia/desktop/git repo/dau/can.h"
+#line 48 "c:/users/sofia/desktop/git repo/dau/can.h"
 void Can_init(void);
 
 void Can_read(unsigned long int *id, char dataBuffer[], unsigned int *dataLength, unsigned int *inFlags);
@@ -32,7 +32,7 @@ void Can_clearB1Flag(void);
 void Can_clearInterrupt(void);
 
 void Can_initInterrupt(void);
-#line 17 "C:/Users/Stefano/Documents/dau 28 06/DAU/can.c"
+#line 17 "C:/Users/sofia/Desktop/GIT REPO/DAU/can.c"
 unsigned long int can_readId = 0;
  char can_dataInBuffer[ 8 ];
 unsigned char can_dataOutBuffer[ 8 ];
@@ -49,10 +49,10 @@ void Can_init() {
  Can_Init_flags = _CAN_CONFIG_STD_MSG &
  _CAN_CONFIG_DBL_BUFFER_ON &
  _CAN_CONFIG_MATCH_MSG_TYPE &
- _CAN_CONFIG_LINE_FILTER_ON &
- _CAN_CONFIG_SAMPLE_THRICE &
+ _CAN_CONFIG_LINE_FILTER_OFF &
+ _CAN_CONFIG_SAMPLE_ONCE &
  _CAN_CONFIG_PHSEG2_PRG_ON;
- CAN1Initialize(2,4,3,4,2,Can_Init_flags);
+ CAN1Initialize(2,2,6,5,8,Can_Init_flags);
  CAN1SetOperationMode(_CAN_MODE_CONFIG,0xFF);
 
  CAN1SetMask(_CAN_MASK_B1,  0b111111111000 , _CAN_CONFIG_MATCH_MSG_TYPE & _CAN_CONFIG_STD_MSG);
